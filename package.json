@@ -1,0 +1,38 @@
+{
+  "name": "blockin-demo",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@json-rpc-tools/utils": "^1.7.6",
+    "@walletconnect/client": "^1.7.7",
+    "@walletconnect/qrcode-modal": "^1.7.7",
+    "@walletconnect/types": "^1.7.7",
+    "algosdk": "^1.15.0",
+    "blockin": "^1.1.9",
+    "blockin-algo-driver": "^1.0.1",
+    "crypto-browserify": "^3.12.0",
+    "dotenv": "^16.0.0",
+    "eth-sig-util": "^3.0.1",
+    "ethers": "^5.6.8",
+    "moralis": "^1.7.0",
+    "next": "^12.1.6",
+    "react": "18.0.0",
+    "react-cookie": "^4.1.1",
+    "react-dom": "18.0.0",
+    "tweetnacl": "^1.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "17.0.23",
+    "@types/react": "18.0.1",
+    "@types/react-dom": "18.0.0",
+    "eslint": "8.13.0",
+    "eslint-config-next": "12.1.4",
+    "typescript": "^4.7.1-rc"
+  }
+}

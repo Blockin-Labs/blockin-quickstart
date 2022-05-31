@@ -1,5 +1,5 @@
 import AlgoDriver from 'blockin-algo-driver';
-import EthDriver from '../../chain-drivers-temporary/EthDriver';
+import EthDriver from 'blockin-eth-driver';
 
 export const getChainDriver = (chain: string) => {
     const ethDriver = new EthDriver('Mainnet', {

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { useChainContext } from "../chain_handlers_frontend/ChainContext"
 import { getChallengeParams, verifyChallengeOnBackend } from "../chain_handlers_frontend/backend_connectors"
 import { SignInWithBlockinButton } from 'blockin/dist/ui';
-import { ChallengeParams, generateNonceWithLastBlockTimestamp, SupportedChain } from 'blockin';
+import { ChallengeParams, SupportedChain } from 'blockin';
 import { signChallengeEth } from "../chain_handlers_frontend/ethereum/sign_challenge";
 import { connect as algorandConnect } from "../chain_handlers_frontend/algorand/WalletConnect";
 import { useAlgorandContext } from "../chain_handlers_frontend/algorand/AlgorandContext";
@@ -125,7 +125,6 @@ export const SignChallengeButton = () => {
         setAddress('');
         if (newChainProps.name === 'Ethereum') {
             setChain('Ethereum');
-            //TODO: I know this isn't the right way to do this but it works
             const connectFunction = () => {
                 const providerOptions = {
                     // Example with WalletConnect provider
@@ -175,7 +174,6 @@ export const SignChallengeButton = () => {
         } else if (newChainProps.name.startsWith('Algorand')) {
 
             setChain(newChainProps.name);
-            //TODO: I know this isn't the right way to do this but it works
             setConnect(() => async () => {
                 algorandConnect(setConnector, setAddress, setConnected);
             });

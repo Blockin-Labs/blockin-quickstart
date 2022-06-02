@@ -8,6 +8,10 @@ import { signChallengeEth } from "../chain_handlers_frontend/ethereum/sign_chall
 import { connect as algorandConnect } from "../chain_handlers_frontend/algorand/WalletConnect";
 import { useAlgorandContext } from "../chain_handlers_frontend/algorand/AlgorandContext";
 import { signChallengeAlgo } from "../chain_handlers_frontend/algorand/sign_challenge";
+import { ethers } from "ethers";
+import { useEthereumContext } from "../chain_handlers_frontend/ethereum/EthereumContext";
+import Web3Modal from "web3modal";
+import WalletConnectProvider from "@walletconnect/web3-provider";
 
 const loadingMessage = <>
     <p>Go to your wallet and accept the challenge request...</p>
@@ -56,7 +60,7 @@ export const SignChallengeButton = () => {
         loggedIn,
         setLoggedIn
     } = useChainContext();
-
+    const { web3Modal, setWeb3Modal } = useEthereumContext();
     const [challengeParams, setChallengeParams] = useState({
         domain: 'https://blockin.com',
         statement: 'Sign in to this website via Blockin. You will remain signed in until you terminate your browser session.',
@@ -123,14 +127,35 @@ export const SignChallengeButton = () => {
             setChain('Ethereum');
             //TODO: I know this isn't the right way to do this but it works
             const connectFunction = () => {
-                return async () => {
-                    console.log("asfjhaksdfhjk");
-                    let accounts = await window.ethereum.request({ method: 'eth_accounts' });
-                    console.log(accounts);
-                    if (accounts[0]) {
-                        setAddress(accounts[0]);
-                        setConnected(true);
+                const providerOptions = {
+                    // Example with WalletConnect provider
+                    walletconnect: {
+                        package: WalletConnectProvider,
+                        options: {
+                            infuraId: "27e484dcd9e3efcfd25a83a78777cdf1"
+                        }
                     }
+                };
+
+                const web3ModalInstance = web3Modal ? web3Modal : new Web3Modal({
+                    network: "mainnet", // optional
+                    cacheProvider: false, // optional
+                    providerOptions // required
+                });
+                setWeb3Modal(web3ModalInstance);
+
+                return async () => {
+                    const handleConnect = async () => {
+                        web3ModalInstance.clearCachedProvider();
+
+                        const instance = await web3ModalInstance.connect();
+                        const provider = new ethers.providers.Web3Provider(instance);
+                        const signer = provider.getSigner();
+                        setConnected(true);
+                        setAddress(await signer.getAddress());
+                        setOwnedAssetIds([]);
+                    }
+                    await handleConnect();
                 }
             }
             setConnect(connectFunction);

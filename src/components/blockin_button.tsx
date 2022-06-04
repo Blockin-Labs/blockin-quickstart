@@ -42,6 +42,7 @@ export const SignChallengeButton = () => {
         disconnect,
         ownedAssetIds,
         address,
+        currentChainInfo,
         setConnect,
         signChallenge,
         setDisconnect,
@@ -125,6 +126,17 @@ export const SignChallengeButton = () => {
         setAddress('');
         if (newChainProps.name === 'Ethereum') {
             setChain('Ethereum');
+            setCurrentChainInfo({
+                getNameForAddress: async (address: string) => {
+                    // console.log("ENSSSSS");
+                    if (address) {
+                        console.log("ATTEMPTING TO RESOLVE ENS NAME...")
+                        const ensAddress = await ethers.getDefaultProvider('homestead', { quorum: 1 }).lookupAddress(address);
+                        if (ensAddress) return ensAddress;
+                    }
+                    return undefined;
+                }
+            });
             const connectFunction = () => {
                 const providerOptions = {
                     // Example with WalletConnect provider
@@ -171,7 +183,7 @@ export const SignChallengeButton = () => {
             setDisplayedAssets([]);
             setDisplayedUris([]);
             setOwnedAssetIds([]);
-        } else if (newChainProps.name.startsWith('Algorand')) {
+        } else if (newChainProps.name && newChainProps.name.startsWith('Algorand')) {
 
             setChain(newChainProps.name);
             setConnect(() => async () => {
@@ -222,6 +234,8 @@ export const SignChallengeButton = () => {
                             name: 'Algorand Mainnet',
                         },
                     ]}
+                    address={address}
+                    currentChainInfo={currentChainInfo}
                     onChainUpdate={handleUpdateChain}
                     challengeParams={challengeParams}
                     loggedIn={loggedIn}
@@ -237,10 +251,6 @@ export const SignChallengeButton = () => {
                 />
             }
         </div>
-        <div style={{ textAlign: 'center' }}>
-            Address: {address ? address : 'None'}
-        </div>
-
         {/* {userIsSigningChallenge && displayMessage} */}
     </>;
 }

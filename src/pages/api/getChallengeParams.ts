@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { generateNonceWithLastBlockTimestamp, setChainDriver } from 'blockin';
+import { generateNonceUsingLastBlockTimestamp, setChainDriver } from 'blockin';
 import { getChainDriver } from "./chainDriverHandlers";
 
 
@@ -20,7 +20,7 @@ const getChallengeParamsRequest = async (req: NextApiRequest, res: NextApiRespon
         statement: 'Sign in to this website via Blockin. You will remain signed in until you terminate your browser session.',
         address: req.body.address,
         uri: 'https://blockin.com/login',
-        nonce: await generateNonceWithLastBlockTimestamp(),
+        nonce: await generateNonceUsingLastBlockTimestamp(),
         expirationDate: '2022-12-22T18:19:55.901Z',
         notBefore: undefined,
         resources: []

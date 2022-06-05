@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { useState } from 'react';
 import Link from 'next/link';
 import { BlockinIcon } from './icons';
-import { SignChallengeButton } from './blockin_button';
+import { BlockinDisplay } from './blockin_display';
 
 const Header = () => {
     return (
@@ -15,7 +15,7 @@ const Header = () => {
                     </a>
                 </Link>
 
-                <SignChallengeButton />
+                <BlockinDisplay />
 
             </header >
         </>

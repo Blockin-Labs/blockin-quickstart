@@ -54,14 +54,3 @@ export const verifyChallengeOnBackend = async (chain: string, originalBytes: Uin
 
     return verificationRes;
 }
-
-
-
-/** 
- *  IMPORTANT: Note that nothing with the signatures is imported from Blockin. Blockin does not handle any
- *  signature functionality. All of this must be implemented in the client. This function uses WalletConnect
- *  and algoSDK to sign the challenge inputted as the 'message' parameter. Once everything is handled with
- *  the signatures, we eventually call verifyChallenge() which takes the signature ad an input. Blockin will
- *  never use your private keys.
- */
-

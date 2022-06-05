@@ -2,6 +2,11 @@ import WalletConnect from "@walletconnect/client";
 import algosdk from "algosdk";
 import { createWCRequest } from "./WalletConnect";
 
+/**
+ * This file contains the code to sign and parse signed transactions from Pera Wallet via WalletConnect. We will just call
+ * signChallengeAlgo() when we want to sign the challenge.
+ */
+
 interface IScenarioTxn {
     txn: algosdk.Transaction;
     signers?: string[];

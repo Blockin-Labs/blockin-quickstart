@@ -2,8 +2,8 @@
 import { useEffect, useState } from "react"
 import { useChainContext } from "../chain_handlers_frontend/ChainContext"
 import { getChallengeParams, verifyChallengeOnBackend } from "../chain_handlers_frontend/backend_connectors"
-import { SignInWithBlockinButton } from 'blockin/dist/ui';
-import { ChallengeParams, SupportedChain } from 'blockin';
+import { BlockinUIDisplay } from 'blockin/dist/ui';
+import { ChallengeParams, constructChallengeObjectFromString, SupportedChainMetadata } from 'blockin';
 import { signChallengeEth } from "../chain_handlers_frontend/ethereum/sign_challenge";
 import { connect as algorandConnect } from "../chain_handlers_frontend/algorand/WalletConnect";
 import { useAlgorandContext } from "../chain_handlers_frontend/algorand/AlgorandContext";
@@ -42,17 +42,15 @@ export const SignChallengeButton = () => {
         disconnect,
         ownedAssetIds,
         address,
-        currentChainInfo,
         setConnect,
         signChallenge,
         setDisconnect,
-        setDisplayedAssets,
-        setDisplayedUris,
-        setCurrentChainInfo,
+        setDisplayedResources,
+        selectedChainInfo,
+        setSelectedChainInfo,
         setSignChallenge,
         setOwnedAssetIds,
-        displayedAssets,
-        displayedUris,
+        displayedResources,
         chain,
         setChain,
         setAddress,
@@ -120,13 +118,13 @@ export const SignChallengeButton = () => {
     /**
     * This is where the chain details in ChainContext are updated upon a new chain being selected.
     */
-    const handleUpdateChain = async (newChainProps: SupportedChain) => {
+    const handleUpdateChain = async (newChainProps: SupportedChainMetadata) => {
         setConnected(false);
         console.log(newChainProps.name);
         setAddress('');
         if (newChainProps.name === 'Ethereum') {
             setChain('Ethereum');
-            setCurrentChainInfo({
+            setSelectedChainInfo({
                 getNameForAddress: async (address: string) => {
                     // console.log("ENSSSSS");
                     if (address) {
@@ -180,8 +178,7 @@ export const SignChallengeButton = () => {
             setSignChallenge(() => async (challenge: string) => {
                 return signChallengeEth(challenge);
             });
-            setDisplayedAssets([]);
-            setDisplayedUris([]);
+            setDisplayedResources([])
             setOwnedAssetIds([]);
         } else if (newChainProps.name && newChainProps.name.startsWith('Algorand')) {
 
@@ -201,8 +198,7 @@ export const SignChallengeButton = () => {
                 if (connector) return signChallengeAlgo(connector, challenge, newChainProps.name === 'Algorand Testnet');
                 else throw 'Error signing challenge'
             });
-            setDisplayedAssets([]);
-            setDisplayedUris([]);
+            setDisplayedResources([])
             setOwnedAssetIds([]);
         }
     }
@@ -214,7 +210,7 @@ export const SignChallengeButton = () => {
     return <>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
             {
-                <SignInWithBlockinButton
+                <BlockinUIDisplay
                     connected={connected}
                     connect={async () => {
                         connect()
@@ -235,7 +231,7 @@ export const SignChallengeButton = () => {
                         },
                     ]}
                     address={address}
-                    currentChainInfo={currentChainInfo}
+                    selectedChainInfo={selectedChainInfo}
                     onChainUpdate={handleUpdateChain}
                     challengeParams={challengeParams}
                     loggedIn={loggedIn}
@@ -243,10 +239,21 @@ export const SignChallengeButton = () => {
                         await logout();
                         setLoggedIn(false);
                     }}
-                    currentChain={chain}
-                    displayedAssets={[]}
-                    signChallenge={handleSignChallenge}
-                    verifyChallengeOnBackend={handleVerifyChallenge}
+                    selectedChainName={chain}
+                    displayedResources={displayedResources}
+                    signAndVerifyChallenge={async (challenge: string) => {
+                        const signChallengeResponse = await handleSignChallenge(challenge);
+                        if (!signChallengeResponse.originalBytes || !signChallengeResponse.signatureBytes) {
+                            return { success: false, message: `${signChallengeResponse.message}` };
+                        }
+
+                        const verifyChallengeResponse = await handleVerifyChallenge(
+                            signChallengeResponse.originalBytes,
+                            signChallengeResponse.signatureBytes,
+                            constructChallengeObjectFromString(challenge)
+                        );
+                        return verifyChallengeResponse;
+                    }}
                     canAddCustomAssets={false}
                 />
             }

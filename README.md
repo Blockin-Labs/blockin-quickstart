@@ -2,11 +2,13 @@
 
 Welcome to the Blockin Quickstart Repo! This repository is a quickstart frontend / backend example repository to get started using Blockin. The pages/api folder is for your backend. Everything else is for your frontend. The backend and frontend should be completely decoupled with no overlap.
 
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app). Blockin also offers an Express backend only template at [`https://github.com/Blockin-Labs/blockin-quickstart-express`](https://github.com/Blockin-Labs/blockin-quickstart-express).
+
 Note that this implementation uses one ChainDriver implementation for Algorand and one for Ethereum. The Algorand one uses WalletConnect, AlgoSDK, and PureStake API. The Ethereum one is built for Moralis and Metamask.
 
 The authorizing resource's backend is simulated in src/pages/api. For an actual implementation, this API should be hosted elsewhere, but it is done like this for convenience purposes using Next.js. Here, we make use of local secrets using process.env variables defined in the .env file. Anything not in this api folder should never use the Blockin library.
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
 
 ## Getting Started
 

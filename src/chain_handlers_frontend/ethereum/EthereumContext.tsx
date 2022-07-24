@@ -46,7 +46,7 @@ export const EthereumContextProvider: React.FC<Props> = ({ children }) => {
         return undefined;
     }
     const selectedChainInfo = { getNameForAddress: resolveAddressToENS };
-    const displayedResources: PresetResource[] = [];
+    const displayedResources: PresetResource[] = []; //This can be dynamic based on Chain ID if you want to give different token addresses for different Chain IDs
 
     //If you would like to support this, you can call this with a useEffect every time connected or address is updated
     const ownedAssetIds: string[] = [];
@@ -64,6 +64,7 @@ export const EthereumContextProvider: React.FC<Props> = ({ children }) => {
             }
         };
 
+        //TODO: Update dynamically based on provider
         const web3ModalInstance = web3Modal ? web3Modal : new Web3Modal({
             network: "mainnet", // optional
             cacheProvider: false, // optional

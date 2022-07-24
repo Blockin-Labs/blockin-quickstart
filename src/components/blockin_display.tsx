@@ -115,6 +115,9 @@ export const BlockinDisplay = () => {
                         { name: 'Ethereum' },
                         { name: 'Algorand Testnet', },
                         { name: 'Algorand Mainnet', },
+                        { name: 'Polygon' },
+                        { name: 'Avalanche' },
+                        { name: 'BSC' },
                     ]}
                     address={address}
                     selectedChainInfo={selectedChainInfo}
@@ -129,6 +132,7 @@ export const BlockinDisplay = () => {
                     displayedResources={displayedResources}
                     signAndVerifyChallenge={signAndVerifyChallenge}
                     canAddCustomAssets={false}
+
                 />
             }
         </div>

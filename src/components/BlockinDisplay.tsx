@@ -4,6 +4,14 @@ import { SignChallengeResponse, useChainContext } from "../chain_handlers_fronte
 import { getChallengeParams, verifyChallengeOnBackend } from "../chain_handlers_frontend/backend_connectors"
 import { BlockinUIDisplay } from 'blockin/dist/ui';
 import { ChallengeParams, constructChallengeObjectFromString, SignAndVerifyChallengeResponse, SupportedChainMetadata } from 'blockin';
+import { PRIMARY_TEXT } from "../constants";
+import { Address } from "./Address";
+import Blockies from 'react-blockies'
+import { Avatar, Typography } from "antd";
+import Image from 'next/image';
+import { getAbbreviatedAddress } from "../utils/AddressUtils";
+
+const { Text } = Typography;
 
 export const BlockinDisplay = () => {
     const {
@@ -61,6 +69,7 @@ export const BlockinDisplay = () => {
              * on the frontend to grant the user access such as setting loggedIn to true, adding cookies, or 
              * anything else that needs to be updated.
              */
+            //TODO: cookies 
             alert(verificationResponse.message);
             setLoggedIn(true);
             return {
@@ -81,6 +90,7 @@ export const BlockinDisplay = () => {
             signChallengeResponse.signatureBytes,
             constructChallengeObjectFromString(challenge)
         );
+
         return verifyChallengeResponse;
     }
 
@@ -97,27 +107,29 @@ export const BlockinDisplay = () => {
         setLoggedIn(false);
     }
 
+    //TODO: Better address display (hideChainName? )
     return <>
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', color: `${PRIMARY_TEXT}` }}>
             {
                 <BlockinUIDisplay
                     connected={connected}
                     connect={async () => {
-                        connect()
+                        connect();
                     }}
                     buttonStyle={undefined}
-                    modalStyle={undefined}
+                    modalStyle={{ color: `black` }}
                     disconnect={async () => {
                         disconnect()
                     }}
+                    hideChainName={true}
                     chainOptions={[
                         //These should match what ChainDrivers are implemented in your backend.
                         { name: 'Ethereum' },
-                        { name: 'Algorand Testnet', },
-                        { name: 'Algorand Mainnet', },
-                        { name: 'Polygon' },
-                        { name: 'Avalanche' },
-                        { name: 'BSC' },
+                        // { name: 'Algorand Testnet', },
+                        // { name: 'Algorand Mainnet', },
+                        // { name: 'Polygon' },
+                        // { name: 'Avalanche' },
+                        // { name: 'BSC' },
                     ]}
                     address={address}
                     selectedChainInfo={selectedChainInfo}
@@ -132,9 +144,30 @@ export const BlockinDisplay = () => {
                     displayedResources={displayedResources}
                     signAndVerifyChallenge={signAndVerifyChallenge}
                     canAddCustomAssets={false}
-
                 />
             }
+
         </div>
+        <div>
+            <Avatar
+                size={200}
+                src={
+                    address ? <Blockies
+                        seed={address.toLowerCase()}
+                        size={100}
+                    /> : <Image src="/images/bitbadgeslogo.png" alt="BitBadges Logo" height={'200%'} width={'200%'} />
+                }
+                style={{ marginTop: 40 }}
+            />
+
+
+        </div>
+        <div> {address && <Address address={address} fontColor={PRIMARY_TEXT} fontSize={36} />}</div>
+        <div> {address && <Text
+            strong
+            style={{ fontSize: 30, color: PRIMARY_TEXT }}
+        >
+            {loggedIn ? 'Signed In' : 'Not Signed In'}
+        </Text>}</div>
     </>;
 }

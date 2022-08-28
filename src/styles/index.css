@@ -1,0 +1,250 @@
+
+@import '../../node_modules/antd/dist/antd.css';
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  position: relative;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+
+.App {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    text-align: center;
+    height: 100%;
+    color: 'white';
+    background-color: '#001529';
+  }
+  
+  .App-logo {
+    height: 7vh;
+    pointer-events: none;
+  }
+  
+  .App-header {
+    width: '100%';
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    font-size: calc(10px + 2vmin);
+    color: white;
+    padding: 0;
+  }
+
+  .App-title {
+    color: white;
+    font-weight: bolder;
+  }
+
+  .navbar-super-collapsed {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  
+     @media (max-width: 920px) { 
+        .navbar-expanded {
+            display: none !important;
+        }
+    }
+
+    @media (max-width: 550px) { 
+        .navbar-super-collapsed {
+            display: none !important;
+           
+        }
+
+        .App-header {
+            justify-content: center;
+        }
+    }
+  
+
+    @media (min-width: 920px) { 
+        .navbar-collapsed {
+            display: none !important;
+        }
+    }
+  
+  .App-link {
+    color: #61dafb;
+  }
+
+  .site-layout-content {
+    height: '100%';
+    padding: 20px;
+    background-color: #fff;
+  }
+
+  #components-layout-demo-top .logo {
+    /* float: left; */
+    height: 31px;
+    margin: 16px 24px 16px 0;
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  .screen-button {
+      background: inherit;
+      transition: background 0.3s, border-color 0.3s, color 0.3s;
+      border: 1px solid white;
+      color: white;
+  }
+
+  .screen-button:hover {
+    color: #1890ff;
+    border: 1px solid #1890ff;
+    background: initial;
+}
+
+.opacity {
+    opacity: 0.65;
+}
+.opacity:hover {
+    opacity: 1;
+}
+
+.badge-avatar:hover {
+    transform: scale(1.1);
+}
+
+.action-item {
+    cursor: pointer;
+}
+
+
+.action-item:hover {
+    background-color: #192c3e;
+}
+
+.link-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    display: inline;
+    margin: 0;
+    padding: 0;
+  }
+
+.link-button-nav {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
+.link-button-nav:hover {
+    text-decoration: underline;
+}
+
+.scale:hover {
+transform: scale(1.01);
+}
+
+.full-area {
+    width: '100%';
+    padding: 0;
+    margin: 0;
+}
+
+.primaryBg {
+    background-color: #001529;
+}
+
+.primary-text {
+    font-weight: bolder;
+    color: white;
+    font-family: Inter,sans-serif;
+    font-size: 50px;
+    font-style: normal;
+    line-height: 1.2;
+    width: 100%;
+    word-break: break-word;
+    word-wrap: break-word;
+}
+
+.badge-flex-display {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.home-page-info {
+    border-radius: 10px;
+    background: #3e83f8;
+    box-shadow:
+        inset 0 0 0 1px #ebebf0,0 15px 30px 0 rgba(0,0,0,0.15);
+    height: 100%;
+    width: 100%;
+    padding: 1rem;
+    display: flex;
+    flex-direction: row;
+    color: white;
+    justify-content: space-between;
+}
+
+.form-input {
+    background-color: #001529;
+    color: white;
+}
+
+.form-input-helper-text {
+    font-size: 12px;
+    text-align: left;
+    color: lightgrey;
+}
+
+.account-socials-button { 
+    margin-bottom: 1px;
+    cursor: pointer;
+    font-size: 20px;
+    padding: 0px;
+    margin: 5px;
+    align-items: center;
+}
+
+.dropdown {
+    min-width: 250px;
+    text-align: center;
+}
+
+.dropdown-item {
+    text-align: center;
+    font-weight: bolder;
+    font-size: 16px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}

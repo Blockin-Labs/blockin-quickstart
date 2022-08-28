@@ -20,7 +20,7 @@ const getChallengeParamsRequest = async (req: NextApiRequest, res: NextApiRespon
         statement: 'Sign in to this website via Blockin. You will remain signed in until you terminate your browser session.',
         address: req.body.address,
         uri: 'https://blockin.com/login',
-        nonce: await generateNonceUsingLastBlockTimestamp(),
+        nonce: '0x12345',
         expirationDate: '2022-12-22T18:19:55.901Z',
         notBefore: undefined,
         resources: []

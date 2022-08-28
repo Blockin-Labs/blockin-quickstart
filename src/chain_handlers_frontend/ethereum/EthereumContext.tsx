@@ -1,16 +1,13 @@
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { PresetResource } from 'blockin';
-import { ethers, TypedDataField } from 'ethers';
+import { ethers } from 'ethers';
 import { createContext, Dispatch, SetStateAction, useContext, useState } from 'react';
 import Web3Modal from "web3modal";
-import { EIP712_BITBADGES_DOMAIN } from '../../api/eip712Types';
 import { ChainSpecificContextType } from '../ChainContext';
 
 export type EthereumContextType = ChainSpecificContextType & {
     web3Modal?: Web3Modal,
     setWeb3Modal: Dispatch<SetStateAction<Web3Modal | undefined>>;
-    signer?: ethers.providers.JsonRpcSigner;
-    setSigner: Dispatch<SetStateAction<ethers.providers.JsonRpcSigner | undefined>>;
 }
 
 export const EthereumContext = createContext<EthereumContextType>({
@@ -23,14 +20,11 @@ export const EthereumContext = createContext<EthereumContextType>({
     address: '',
     setAddress: () => { },
     signChallenge: async () => { return {} },
-    signTxn: async () => { },
     ownedAssetIds: [],
     displayedResources: [],
     selectedChainInfo: {},
     connected: false,
-    setConnected: () => { },
-    signer: undefined,
-    setSigner: () => { }
+    setConnected: () => { }
 })
 
 
@@ -43,7 +37,6 @@ export const EthereumContextProvider: React.FC<Props> = ({ children }) => {
     const [address, setAddress] = useState<string>('')
     const [connected, setConnected] = useState<boolean>(false);
     const [chainId, setChainId] = useState<string>('Mainnet');
-    const [signer, setSigner] = useState<ethers.providers.JsonRpcSigner>();
 
     const resolveAddressToENS = async (address: string) => {
         if (address) {
@@ -83,10 +76,6 @@ export const EthereumContextProvider: React.FC<Props> = ({ children }) => {
         const instance = await web3ModalInstance.connect();
         const provider = new ethers.providers.Web3Provider(instance);
         const signer = provider.getSigner();
-        const address = await signer.getAddress();
-        console.log("SIGNER", signer, address);
-
-        setSigner(signer);
         setConnected(true);
         setAddress(await signer.getAddress());
     }
@@ -109,13 +98,6 @@ export const EthereumContextProvider: React.FC<Props> = ({ children }) => {
         return { originalBytes: new Uint8Array(Buffer.from(msg, 'utf8')), signatureBytes: new Uint8Array(Buffer.from(sign, 'utf8')), message: 'Success' }
     }
 
-    const signTxn = async (types: Record<string, TypedDataField[]>, txn: object) => {
-        console.log("TESTING")
-        console.log(signer, types, txn)
-
-        await signer?._signTypedData(EIP712_BITBADGES_DOMAIN, types, txn);
-    }
-
     const ethereumContext: EthereumContextType = {
         connected,
         setConnected,
@@ -127,13 +109,10 @@ export const EthereumContextProvider: React.FC<Props> = ({ children }) => {
         selectedChainInfo,
         displayedResources,
         signChallenge,
-        signTxn,
         address,
         setAddress,
         web3Modal,
-        setWeb3Modal,
-        signer,
-        setSigner,
+        setWeb3Modal
     };
 
     return <EthereumContext.Provider value={ethereumContext}>

@@ -19,9 +19,9 @@ const verifyChallengeRequest = async (req: NextApiRequest, res: NextApiResponse)
         const verificationResponse = await verifyChallenge(
             body.originalBytes,
             body.signatureBytes,
-            // {
-            //     verifyNonceUsingBlockTimestamps: true
-            // }
+            {
+                verifyNonceUsingBlockTimestamps: true
+            }
         );
 
         /**
@@ -45,8 +45,6 @@ const verifyChallengeRequest = async (req: NextApiRequest, res: NextApiResponse)
          *      -Just granting the user access
          *      -Or anything else
          */
-
-        //TODO: cookies
 
         return res.status(200).json({ verified: true, message: verificationResponse.message });
     } catch (err) {

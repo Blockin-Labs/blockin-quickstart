@@ -12,7 +12,7 @@ import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { mainnet } from 'wagmi/chains';
 
 const chains = [mainnet]
-const projectId = 'febf8d9986a2cd637fa4004338dad39b'
+const projectId = '' //TODO: Add your own WalletConnect project ID here
 
 const { publicClient } = configureChains(chains, [w3mProvider({ projectId })])
 const wagmiClient = createConfig({

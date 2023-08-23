@@ -4,6 +4,10 @@ import { createContext, Dispatch, ReactComponentElement, ReactNode, SetStateActi
 import { useAlgorandContext } from './algorand/AlgorandContext';
 import { useEthereumContext } from './ethereum/EthereumContext';
 import { useCosmosContext } from './cosmos/CosmosContext';
+import { useSimulatedContext } from './simulated/SimulatedContext';
+import getConfig from 'next/config';
+
+const { publicRuntimeConfig } = getConfig();
 
 export type SignChallengeResponse = {
   originalBytes?: Uint8Array;
@@ -67,17 +71,18 @@ type Props = {
 };
 
 export const ChainContextProvider: React.FC<Props> = ({ children }) => {
-  const [chain, setChain] = useState<string>('Ethereum');
+  const [chain, setChain] = useState<string>(publicRuntimeConfig.IS_DEMO ? 'Simulated' : 'Ethereum');
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const ethereumContext = useEthereumContext();
   const algorandContext = useAlgorandContext();
   const cosmosContext = useCosmosContext();
+  const simulatedContext = useSimulatedContext();
 
   useEffect(() => {
     if (chain === 'Ethereum') {
       ethereumContext.setChainId('eth');
+    } else if (chain === 'Simulated') {
     } else if (chain === 'Cosmos') {
-
 
     } else if (chain === 'Polygon') {
       ethereumContext.setChainId('polygon');
@@ -97,6 +102,8 @@ export const ChainContextProvider: React.FC<Props> = ({ children }) => {
     currentChainContext = algorandContext;
   } else if (chain?.startsWith('Cosmos')) {
     currentChainContext = cosmosContext;
+  } else if (chain?.startsWith('Simulated')) {
+    currentChainContext = simulatedContext;
   } else {
     currentChainContext = ethereumContext;
   }

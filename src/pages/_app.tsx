@@ -10,9 +10,14 @@ import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
 import { Web3Modal } from '@web3modal/react';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { mainnet } from 'wagmi/chains';
+import getConfig from 'next/config';
+import { SimulatedContextProvider } from '../chain_handlers_frontend/simulated/SimulatedContext';
+
+const { publicRuntimeConfig } = getConfig();
+
 
 const chains = [mainnet]
-const projectId = '' //TODO: Add your own WalletConnect project ID here
+const projectId = publicRuntimeConfig.WC_PROJECT_ID //TODO: Add your own here
 
 const { publicClient } = configureChains(chains, [w3mProvider({ projectId })])
 const wagmiClient = createConfig({
@@ -30,14 +35,17 @@ const App = ({ Component, pageProps }: AppProps) => {
         <EthereumContextProvider>
           <AlgorandContextProvider>
             <CosmosContextProvider>
-              <ChainContextProvider>
+              <SimulatedContextProvider>
+                <ChainContextProvider>
 
-                <Web3Modal projectId={projectId} ethereumClient={ethereumClient}
-                  themeMode="dark"
-                />
-                <Component {...pageProps} />
+                  <Web3Modal projectId={projectId} ethereumClient={ethereumClient}
+                    themeMode="dark"
+                  />
+                  <Component {...pageProps} />
 
-              </ChainContextProvider>
+                </ChainContextProvider>
+              </SimulatedContextProvider>
+
             </CosmosContextProvider>
 
           </AlgorandContextProvider>

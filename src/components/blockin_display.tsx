@@ -45,13 +45,17 @@ export const BlockinDisplay = () => {
   }
 
   const handleSignChallenge = async (challenge: string) => {
+    if (chain === 'Simulated') {
+      return { signatureBytes: new Uint8Array(32), originalBytes: new Uint8Array(32) };
+    }
+
     const response = await signChallenge(challenge);
     return response;
   }
 
   const handleVerifyChallenge = async (originalBytes: Uint8Array, signatureBytes: Uint8Array, challengeObj?: ChallengeParams<number>) => {
-    const verificationResponse = await verifyChallengeOnBackend(chain, originalBytes, signatureBytes);
-
+    const verificationResponse = chain !== 'Simulated' ? await verifyChallengeOnBackend(chain, originalBytes, signatureBytes) :
+      { verified: true, message: 'Satisfied ownership requirements. Verification success!' };
     if (!verificationResponse.verified) {
       return { success: false, message: `${verificationResponse.message}` }
     }
@@ -112,6 +116,7 @@ export const BlockinDisplay = () => {
           }}
           chainOptions={[
             //These should match what ChainDrivers are implemented in your backend.
+            { name: 'Simulated' },
             { name: 'Ethereum' },
             { name: 'Cosmos' },
 
@@ -135,7 +140,7 @@ export const BlockinDisplay = () => {
           displayedResources={displayedResources}
           displayedAssets={[
             //TODO: Add your own assets here. Note they can change dependent on the connected chain.
-            chain === 'Ethereum' ? {
+            chain === 'Ethereum' || chain === 'Simulated' ? {
               collectionId: "0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB",
               assetIds: ["15"],
               mustOwnAmounts: { start: 0, end: 0 },

@@ -1,10 +1,11 @@
-import WalletConnectProvider from '@walletconnect/web3-provider';
 import { PresetAsset, PresetUri } from 'blockin';
 import { ethers } from 'ethers';
-import { createContext, Dispatch, SetStateAction, useContext, useState } from 'react';
+import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
 import Web3Modal from "web3modal";
 import { ChainSpecificContextType } from '../ChainContext';
-
+import { disconnect as disconnectWeb3 } from "@wagmi/core";
+import { useWeb3Modal } from "@web3modal/react";
+import { useAccount } from "wagmi";
 export type EthereumContextType = ChainSpecificContextType & {
   web3Modal?: Web3Modal,
   setWeb3Modal: Dispatch<SetStateAction<Web3Modal | undefined>>;
@@ -34,10 +35,12 @@ type Props = {
 };
 
 export const EthereumContextProvider: React.FC<Props> = ({ children }) => {
+  const web3AccountContext = useAccount();
   const [web3Modal, setWeb3Modal] = useState<Web3Modal>();
   const [address, setAddress] = useState<string>('')
   const [connected, setConnected] = useState<boolean>(false);
   const [chainId, setChainId] = useState<string>('Mainnet');
+  const { open } = useWeb3Modal();
 
   const resolveAddressToENS = async (address: string) => {
     //TODO: Uses default provider, but you can use your own for quicker resolution
@@ -53,38 +56,29 @@ export const EthereumContextProvider: React.FC<Props> = ({ children }) => {
   //If you would like to support this, you can call this with a useEffect every time connected or address is updated
   const ownedAssetIds: string[] = [];
 
+  useEffect(() => {
+    async function setDetails() {
+      if (web3AccountContext.address) {
+        setAddress(web3AccountContext.address);
 
+        setConnected(true);
+      } else {
+        setConnected(false);
+      }
+    }
+
+    setDetails();
+  }, [web3AccountContext.address,])
 
   const connect = async () => {
-    const providerOptions = {
-      // Example with WalletConnect provider
-      walletconnect: {
-        package: WalletConnectProvider,
-        options: {
-          infuraId: "27e484dcd9e3efcfd25a83a78777cdf1"
-        }
-      }
-    };
+    await open()
 
-    //TODO: Update dynamically based on provider
-    const web3ModalInstance = web3Modal ? web3Modal : new Web3Modal({
-      network: "mainnet", // optional
-      cacheProvider: false, // optional
-      providerOptions // required
-    });
-    setWeb3Modal(web3ModalInstance);
-    web3ModalInstance.clearCachedProvider();
-
-    const instance = await web3ModalInstance.connect();
-    const provider = new ethers.providers.Web3Provider(instance);
-    const signer = provider.getSigner();
-    setConnected(true);
-    setAddress(await signer.getAddress());
   }
 
   const disconnect = async () => {
     setAddress('');
     setConnected(false);
+    await disconnectWeb3();
   };
 
   const signChallenge = async (message: string) => {

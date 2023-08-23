@@ -4,6 +4,7 @@ import { createContext, Dispatch, SetStateAction, useContext, useState } from 'r
 import { ChainSpecificContextType } from '../ChainContext';
 import { signChallengeAlgo } from './sign_challenge';
 import { connect as algorandConnect } from './WalletConnect'
+import { PeraWalletConnect } from "@perawallet/connect"
 
 export type AlgorandContextType = ChainSpecificContextType & {
   connector?: WalletConnect,
@@ -27,6 +28,10 @@ export const AlgorandContext = createContext<AlgorandContextType>({
   setConnected: () => { },
   displayedAssets: []
 })
+
+const peraWallet = new PeraWalletConnect({
+  shouldShowSignTxnToast: false
+});
 
 export const useAlgorandContext = () => useContext(AlgorandContext)
 

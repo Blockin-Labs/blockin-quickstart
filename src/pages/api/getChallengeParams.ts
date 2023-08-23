@@ -1,5 +1,5 @@
+import { ChallengeParams, setChainDriver } from 'blockin';
 import { NextApiRequest, NextApiResponse } from "next";
-import { generateNonceUsingLastBlockTimestamp, setChainDriver } from 'blockin';
 import { getChainDriver } from "./chainDriverHandlers";
 
 
@@ -12,19 +12,25 @@ import { getChainDriver } from "./chainDriverHandlers";
  * as a nonce.
  */
 const getChallengeParamsRequest = async (req: NextApiRequest, res: NextApiResponse) => {
-    const chainDriver = getChainDriver(req.body.chain);
-    setChainDriver(chainDriver);
+  const chainDriver = getChainDriver(req.body.chain);
+  setChainDriver(chainDriver);
 
-    return res.status(200).json({
-        domain: 'https://blockin.com',
-        statement: 'Sign in to this website via Blockin. You will remain signed in until you terminate your browser session.',
-        address: req.body.address,
-        uri: 'https://blockin.com/login',
-        nonce: await generateNonceUsingLastBlockTimestamp(),
-        expirationDate: '2022-12-22T18:19:55.901Z',
-        notBefore: undefined,
-        resources: []
-    });
+  const challengeParams: ChallengeParams<number> = {
+    //TODO: Customize 
+    domain: 'https://blockin.com',
+    statement: 'Sign in to this website via Blockin. You will remain signed in until you terminate your browser session.',
+    address: req.body.address,
+    uri: 'https://blockin.com/login',
+    nonce: '123456789', //TODO: Replace with your scheme
+    notBefore: undefined,
+
+    //The following don't matter bc they will be overriden by the display modal
+    expirationDate: '2024-12-22T18:19:55.901Z',
+    resources: [],
+    assets: [],
+  }
+
+  return res.status(200).json(challengeParams);
 };
 
 export default getChallengeParamsRequest;

@@ -105,6 +105,7 @@ export const BlockinDisplay = () => {
     setLoggedIn(false);
   }
 
+  //These should match what is in the backend / ChainContext
   const chainOptions = []
   if (IS_DEMO) {
     chainOptions.push({ name: 'Simulated' });
@@ -112,9 +113,9 @@ export const BlockinDisplay = () => {
   chainOptions.push(...[
     { name: 'Ethereum' },
     { name: 'Cosmos' },
-    { name: 'Polygon' },
-    { name: 'Avalanche' },
-    { name: 'BSC' },
+    // { name: 'Polygon' },
+    // { name: 'Avalanche' },
+    // { name: 'BSC' },
     // { name: 'Algorand Mainnet', },
     // { name: 'Algorand Testnet', },
   ])

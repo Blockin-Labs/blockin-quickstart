@@ -19,17 +19,17 @@ const ethDriver = new EthDriver('0x1', {
   apiKey: process.env.MORALIS_API_KEY ? process.env.MORALIS_API_KEY : '',
 });
 
-const polygonDriver = new EthDriver('0x89', {
-  apiKey: process.env.MORALIS_API_KEY ? process.env.MORALIS_API_KEY : '',
-});
+// const polygonDriver = new EthDriver('0x89', {
+//   apiKey: process.env.MORALIS_API_KEY ? process.env.MORALIS_API_KEY : '',
+// });
 
-const bscDriver = new EthDriver('0x38', {
-  apiKey: process.env.MORALIS_API_KEY ? process.env.MORALIS_API_KEY : '',
-});
+// const bscDriver = new EthDriver('0x38', {
+//   apiKey: process.env.MORALIS_API_KEY ? process.env.MORALIS_API_KEY : '',
+// });
 
-const avalancheDriver = new EthDriver('0xa86a', {
-  apiKey: process.env.MORALIS_API_KEY ? process.env.MORALIS_API_KEY : '',
-});
+// const avalancheDriver = new EthDriver('0xa86a', {
+//   apiKey: process.env.MORALIS_API_KEY ? process.env.MORALIS_API_KEY : '',
+// });
 
 // const algoTestnetDriver = new AlgoDriver('Testnet', process.env.ALGO_API_KEY ? process.env.ALGO_API_KEY : '');
 // const algoMainnetDriver = new AlgoDriver('Mainnet', process.env.ALGO_API_KEY ? process.env.ALGO_API_KEY : '');
@@ -45,12 +45,12 @@ export const getChainDriver = (chain: string) => {
     //   return algoMainnetDriver;
     case 'Ethereum':
       return ethDriver;
-    case 'Polygon':
-      return polygonDriver;
-    case 'Avalanche':
-      return avalancheDriver;
-    case 'BSC':
-      return bscDriver;
+    // case 'Polygon':
+    //   return polygonDriver;
+    // case 'Avalanche':
+    //   return avalancheDriver;
+    // case 'BSC':
+    //   return bscDriver;
     case 'Cosmos':
       return cosmosDriver;
     default:

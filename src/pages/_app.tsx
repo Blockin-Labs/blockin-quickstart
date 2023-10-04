@@ -3,8 +3,8 @@ import { ChainContextProvider } from '../chain_handlers_frontend/ChainContext';
 import { AlgorandContextProvider } from '../chain_handlers_frontend/algorand/AlgorandContext';
 import { CosmosContextProvider } from '../chain_handlers_frontend/cosmos/CosmosContext';
 import { EthereumContextProvider } from '../chain_handlers_frontend/ethereum/EthereumContext';
-import '../styles/globals.css';
 
+import { BlockinUIDisplay } from 'blockin/dist/ui';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum';
 import { Web3Modal } from '@web3modal/react';
@@ -12,6 +12,7 @@ import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { mainnet } from 'wagmi/chains';
 import getConfig from 'next/config';
 import { SimulatedContextProvider } from '../chain_handlers_frontend/simulated/SimulatedContext';
+import '../styles/globals.css';
 
 const { publicRuntimeConfig } = getConfig();
 

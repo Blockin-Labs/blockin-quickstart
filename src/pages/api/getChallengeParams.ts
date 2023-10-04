@@ -18,7 +18,7 @@ const getChallengeParamsRequest = async (req: NextApiRequest, res: NextApiRespon
   const challengeParams: ChallengeParams<number> = {
     //TODO: Customize 
     domain: 'https://blockin.com',
-    statement: 'Sign in to this website via Blockin. You will remain signed in until you terminate your browser session.',
+    statement: 'Signing in allows you to prove ownership of your account and unlock additional features for this site.',
     address: req.body.address,
     uri: 'https://blockin.com/login',
     nonce: '123456789', //TODO: Replace with your scheme

@@ -17,7 +17,7 @@ const Home: NextPage = () => {
             <h2>Welcome to the Blockin Demo!</h2>
             <p>You may select the Simulated option to interact with this demo without connecting a wallet.</p>
             <hr />
-            <p>Learn more about Blockin by checking out the <a href="https://blockin.gitbook.io/blockin/" target="_blank" rel="noreferrer" style={{ color: 'blue' }}>documentation</a> or the <a href="https://github.com/Blockin-Labs" target="_blank" rel="noreferrer" style={{ color: 'blue' }}>source code</a>!</p>
+            <p>Learn more about Blockin by checking out the <a href="https://blockin.gitbook.io/blockin/" target="_blank" rel="noreferrer" style={{  }}>documentation</a> or the <a href="https://github.com/Blockin-Labs" target="_blank" rel="noreferrer" style={{  }}>source code</a>!</p>
           </section>
         </main>
       </>}

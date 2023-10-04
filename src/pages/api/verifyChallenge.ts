@@ -24,7 +24,7 @@ const verifyChallengeRequest = async (req: NextApiRequest, res: NextApiResponse)
       {
         //TODO: Add any additional verification checks here (including your nonce check)
         // expectedChallengeParams: {}
-        // beforeVerification:
+        // beforeVerification: () => {}
         //TODO: Add your snapshot here 
         // balancesSnapshot
       }
@@ -52,10 +52,9 @@ const verifyChallengeRequest = async (req: NextApiRequest, res: NextApiResponse)
      *      -Just granting the user access
      *      -Or anything else
      */
-
     return res.status(200).json({ verified: true, message: verificationResponse.message });
   } catch (err) {
-    return res.status(200).json({ verified: false, message: `${err}` });
+    return res.status(400).json({ verified: false, message: `${err}` });
   }
 };
 

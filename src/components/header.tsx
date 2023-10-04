@@ -1,20 +1,24 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
-import Link from 'next/link';
 import { BlockinDisplay } from './blockin_display';
-import { BlockinIcon } from './icons';
 
 const Header = () => {
   return (
     <>
       <header>
-        <Link href={'/'}>
-          <a>
-            <h1 className='banner'>BL<BlockinIcon dimensions='40pt' />CKIN</h1>
-          </a>
-        </Link>
+        <h1 className='banner'>
+          <div style={{ backgroundColor: 'white', alignItems: 'center', display: 'flex' }}>
+            <img src="./blockin-zoomed.png" alt="blockin" height={43} width={43} className='blockin-new-logo' />
+          </div>
+          LOCKIN</h1>
 
-        <BlockinDisplay />
+
       </header >
+      <br />
+      <BlockinDisplay />
+      <br />
+      <br />
+      <br />
     </>
   )
 }

@@ -4,6 +4,11 @@ import { SignChallengeResponse, useChainContext } from "../chain_handlers_fronte
 import { getChallengeParams, verifyChallengeOnBackend } from "../chain_handlers_frontend/backend_connectors"
 import { BlockinUIDisplay } from 'blockin/dist/ui';
 import { ChallengeParams, constructChallengeObjectFromString, SignAndVerifyChallengeResponse, SupportedChainMetadata } from 'blockin';
+import getConfig from "next/config";
+
+const { publicRuntimeConfig } = getConfig();
+
+const IS_DEMO = publicRuntimeConfig.IS_DEMO
 
 export const BlockinDisplay = () => {
   const {
@@ -22,7 +27,7 @@ export const BlockinDisplay = () => {
 
   const [challengeParams, setChallengeParams] = useState({
     domain: 'https://blockin.com',
-    statement: 'Sign in to this website via Blockin. You will remain signed in until you terminate your browser session.',
+    statement: 'Signing in allows you to prove ownership of your account and unlock additional features for this site.',
     address: address,
     uri: 'https://blockin.com/login',
     nonce: 'Default Nonce'
@@ -65,7 +70,6 @@ export const BlockinDisplay = () => {
        * on the frontend to grant the user access such as setting loggedIn to true, adding cookies, or 
        * anything else that needs to be updated.
        */
-      alert(verificationResponse.message);
       setLoggedIn(true);
       return {
         success: true, message: `${verificationResponse.message}`
@@ -101,32 +105,33 @@ export const BlockinDisplay = () => {
     setLoggedIn(false);
   }
 
+  const chainOptions = []
+  if (IS_DEMO) {
+    chainOptions.push({ name: 'Simulated' });
+  }
+  chainOptions.push(...[
+    { name: 'Ethereum' },
+    { name: 'Cosmos' },
+    { name: 'Polygon' },
+    { name: 'Avalanche' },
+    { name: 'BSC' },
+    // { name: 'Algorand Mainnet', },
+    // { name: 'Algorand Testnet', },
+  ])
+
   return <>
-    <div style={{ display: 'flex', justifyContent: 'center' }}>
+    <div >
       {
         <BlockinUIDisplay
           connected={connected}
           connect={async () => {
             connect()
           }}
-          buttonStyle={undefined}
-          modalStyle={undefined}
+          modalStyle={{ color: 'white' }}
           disconnect={async () => {
             disconnect()
           }}
-          chainOptions={[
-            //These should match what ChainDrivers are implemented in your backend.
-            { name: 'Simulated' },
-            { name: 'Ethereum' },
-            { name: 'Cosmos' },
-
-            { name: 'Algorand Mainnet', },
-            { name: 'Polygon' },
-            { name: 'Avalanche' },
-            { name: 'BSC' },
-            { name: 'Algorand Testnet', },
-
-          ]}
+          chainOptions={chainOptions}
           address={address}
           selectedChainInfo={selectedChainInfo}
           onChainUpdate={handleUpdateChain}
@@ -136,17 +141,20 @@ export const BlockinDisplay = () => {
             await logout();
             setLoggedIn(false);
           }}
+          allowTimeSelect
           selectedChainName={chain}
           displayedResources={displayedResources}
           displayedAssets={[
             //TODO: Add your own assets here. Note they can change dependent on the connected chain.
+            //TODO: Customize the display further with the additionalDisplay field (e.g. showing the asset image)
+
             chain === 'Ethereum' || chain === 'Simulated' ? {
               collectionId: "0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB",
               assetIds: ["15"],
               mustOwnAmounts: { start: 0, end: 0 },
               chain: 'Ethereum',
               name: "General Access",
-              description: "Must now own any CryptoPunks to receive access to this site.",
+              description: "Any user who owns this Ethereum NFT is blocked from the site.",
               frozen: true,
               defaultSelected: true
             } : chain === 'Cosmos' ? {
@@ -157,32 +165,48 @@ export const BlockinDisplay = () => {
               name: "General Access",
               description: "We currently don't support Cosmos assets natively, so we will use a badge for general access instead.",
               frozen: true,
-              defaultSelected: true
+              defaultSelected: true,
             } : {
               collectionId: "0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB",
               assetIds: ["15"],
               mustOwnAmounts: { start: 0, end: 0 },
               chain: 'Algorand',
               name: "General Access",
-              description: "Must now own any CryptoPunks to receive access to this site.",
+              description: "Must not own any CryptoPunks to receive access to this site.",
               frozen: true,
               defaultSelected: true
             },
             {
               collectionId: 1,
               assetIds: [{ start: 1, end: 1 }],
-              mustOwnAmounts: { start: 0, end: 0 },
+              mustOwnAmounts: { start: 1, end: 1 },
               chain: 'BitBadges',
-              name: "Premium Features",
-              description: "Must own the following badge from BitBadges to receive access to this site.",
+              name: "Administrative Privileges",
+              description: <>
+                {"Must own the admin badge from BitBadges to receive administrative privileges on this site."}
+                <br />
+                <br />
+                <div className="flex-center">
+                  <img src="https://cdn-icons-png.flaticon.com/512/2991/2991252.png" style={{ width: '100px', height: '100px', marginRight: '10px', background: 'inherit' }} />
+                </div>
+              </>,
+
               frozen: false,
               defaultSelected: false,
             }
+            // {
+            //   collectionId: 1,
+            //   assetIds: [{ start: 1, end: 1 }],
+            //   mustOwnAmounts: { start: 0, end: 0 },
+            //   chain: 'BitBadges',
+            //   name: "Premium Features",
+            //   description: "Must own our premium features badge from BitBadges to receive premium features on this site.",
+            //   frozen: false,
+            //   defaultSelected: true,
+            // },
           ]}
-          hideChainName
+          hideChainSelect={false}
           signAndVerifyChallenge={signAndVerifyChallenge}
-          canAddCustomAssets={false}
-          allowTimeSelect
         />
       }
     </div>

@@ -1,6 +1,6 @@
 import type { AppProps } from 'next/app';
 import { ChainContextProvider } from '../chain_handlers_frontend/ChainContext';
-import { AlgorandContextProvider } from '../chain_handlers_frontend/algorand/AlgorandContext';
+// import { AlgorandContextProvider } from '../chain_handlers_frontend/algorand/AlgorandContext';
 import { CosmosContextProvider } from '../chain_handlers_frontend/cosmos/CosmosContext';
 import { EthereumContextProvider } from '../chain_handlers_frontend/ethereum/EthereumContext';
 
@@ -34,22 +34,22 @@ const App = ({ Component, pageProps }: AppProps) => {
     <QueryClientProvider client={queryClient}>
       <WagmiConfig config={wagmiClient}>
         <EthereumContextProvider>
-          <AlgorandContextProvider>
-            <CosmosContextProvider>
-              <SimulatedContextProvider>
-                <ChainContextProvider>
+          {/* <AlgorandContextProvider> */}
+          <CosmosContextProvider>
+            <SimulatedContextProvider>
+              <ChainContextProvider>
 
-                  <Web3Modal projectId={projectId} ethereumClient={ethereumClient}
-                    themeMode="dark"
-                  />
-                  <Component {...pageProps} />
+                <Web3Modal projectId={projectId} ethereumClient={ethereumClient}
+                  themeMode="dark"
+                />
+                <Component {...pageProps} />
 
-                </ChainContextProvider>
-              </SimulatedContextProvider>
+              </ChainContextProvider>
+            </SimulatedContextProvider>
 
-            </CosmosContextProvider>
+          </CosmosContextProvider>
 
-          </AlgorandContextProvider>
+          {/* </AlgorandContextProvider> */}
         </EthereumContextProvider>
 
       </WagmiConfig>

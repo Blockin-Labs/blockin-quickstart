@@ -8,7 +8,7 @@
 // import CosmosDriver from './chainDrivers/CosmosDriver'
 
 //If you simply want the library versions of the Blockin drivers, you can import them like below.
-import AlgoDriver from 'blockin-algo-driver';
+// import AlgoDriver from 'blockin-algo-driver';
 import CosmosDriver from 'blockin-cosmos-driver';
 import EthDriver from 'blockin-eth-driver';
 
@@ -31,18 +31,18 @@ const avalancheDriver = new EthDriver('0xa86a', {
   apiKey: process.env.MORALIS_API_KEY ? process.env.MORALIS_API_KEY : '',
 });
 
-const algoTestnetDriver = new AlgoDriver('Testnet', process.env.ALGO_API_KEY ? process.env.ALGO_API_KEY : '');
-const algoMainnetDriver = new AlgoDriver('Mainnet', process.env.ALGO_API_KEY ? process.env.ALGO_API_KEY : '');
+// const algoTestnetDriver = new AlgoDriver('Testnet', process.env.ALGO_API_KEY ? process.env.ALGO_API_KEY : '');
+// const algoMainnetDriver = new AlgoDriver('Mainnet', process.env.ALGO_API_KEY ? process.env.ALGO_API_KEY : '');
 const cosmosDriver = new CosmosDriver('bitbadges_1-1');
 
 export const getChainDriver = (chain: string) => {
 
 
   switch (chain) {
-    case 'Algorand Testnet':
-      return algoTestnetDriver;
-    case 'Algorand Mainnet':
-      return algoMainnetDriver;
+    // case 'Algorand Testnet':
+    //   return algoTestnetDriver;
+    // case 'Algorand Mainnet':
+    //   return algoMainnetDriver;
     case 'Ethereum':
       return ethDriver;
     case 'Polygon':

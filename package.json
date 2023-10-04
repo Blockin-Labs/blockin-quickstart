@@ -17,7 +17,6 @@
     "@walletconnect/web3-provider": "^1.7.8",
     "@web3modal/ethereum": "^2.7.1",
     "@web3modal/react": "^2.7.1",
-    "algosdk": "^1.19.0",
     "bitbadgesjs-proto": "^0.1.83",
     "blockin": "^1.2.55",
     "blockin-algo-driver": "^1.0.3",
@@ -33,15 +32,17 @@
     "react-cookie": "^4.1.1",
     "react-dom": "18.0.0",
     "tweetnacl": "^1.0.3",
-    "wagmi": "^1.3.10",
+    "viem": "^1.14.0",
+    "wagmi": "^1.4.2",
     "web3modal": "^1.9.8"
   },
   "devDependencies": {
     "@types/node": "17.0.23",
     "@types/react": "18.0.1",
     "@types/react-dom": "18.0.0",
-    "eslint": "8.13.0",
-    "eslint-config-next": "12.1.4",
-    "typescript": "^4.7.4"
+    "@typescript-eslint/parser": "^6.7.4",
+    "eslint": "8.50.0",
+    "eslint-config-next": "13.5.3",
+    "typescript": "^5.2.2"
   }
 }

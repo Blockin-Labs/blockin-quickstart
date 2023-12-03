@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react"
-import { SignChallengeResponse, useChainContext } from "../chain_handlers_frontend/ChainContext"
-import { getChallengeParams, verifyChallengeOnBackend } from "../chain_handlers_frontend/backend_connectors"
+import { SignAndVerifyChallengeResponse, SupportedChainMetadata } from 'blockin';
 import { BlockinUIDisplay } from 'blockin/dist/ui';
-import { ChallengeParams, constructChallengeObjectFromString, SignAndVerifyChallengeResponse, SupportedChainMetadata } from 'blockin';
 import getConfig from "next/config";
+import { useEffect, useState } from "react";
+import { SignChallengeResponse, useChainContext } from "../chain_handlers_frontend/ChainContext";
+import { getChallengeParams, verifyChallengeOnBackend } from "../chain_handlers_frontend/backend_connectors";
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -51,15 +51,15 @@ export const BlockinDisplay = () => {
 
   const handleSignChallenge = async (challenge: string) => {
     if (chain === 'Simulated') {
-      return { signatureBytes: new Uint8Array(32), originalBytes: new Uint8Array(32) };
+      return { message: '', signature: '' };
     }
 
     const response = await signChallenge(challenge);
     return response;
   }
 
-  const handleVerifyChallenge = async (originalBytes: Uint8Array, signatureBytes: Uint8Array, challengeObj?: ChallengeParams<number>) => {
-    const verificationResponse = chain !== 'Simulated' ? await verifyChallengeOnBackend(chain, originalBytes, signatureBytes) :
+  const handleVerifyChallenge = async (message: string, signature: string) => {
+    const verificationResponse = chain !== 'Simulated' ? await verifyChallengeOnBackend(chain, message, signature) :
       { verified: true, message: 'Satisfied ownership requirements. Verification success!' };
     if (!verificationResponse.verified) {
       return { success: false, message: `${verificationResponse.message}` }
@@ -80,14 +80,13 @@ export const BlockinDisplay = () => {
   const signAndVerifyChallenge = async (challenge: string) => {
     const signChallengeResponse: SignChallengeResponse = await handleSignChallenge(challenge);
     //Check if error in challenge signature
-    if (!signChallengeResponse.originalBytes || !signChallengeResponse.signatureBytes) {
+    if (!signChallengeResponse.message || !signChallengeResponse.signature) {
       return { success: false, message: `${signChallengeResponse.message}` };
     }
 
     const verifyChallengeResponse: SignAndVerifyChallengeResponse = await handleVerifyChallenge(
-      signChallengeResponse.originalBytes,
-      signChallengeResponse.signatureBytes,
-      constructChallengeObjectFromString(challenge, (x) => Number(x))
+      signChallengeResponse.message,
+      signChallengeResponse.signature
     );
     return verifyChallengeResponse;
   }
@@ -113,11 +112,7 @@ export const BlockinDisplay = () => {
   chainOptions.push(...[
     { name: 'Ethereum' },
     { name: 'Cosmos' },
-    // { name: 'Polygon' },
-    // { name: 'Avalanche' },
-    // { name: 'BSC' },
-    // { name: 'Algorand Mainnet', },
-    // { name: 'Algorand Testnet', },
+    { name: 'Solana' },
   ])
 
   return <>
@@ -132,7 +127,7 @@ export const BlockinDisplay = () => {
           disconnect={async () => {
             disconnect()
           }}
-          chainOptions={chainOptions}
+          chainOptions={chainOptions} //Should match your selected ChainDrivers in backend / ChainContexts
           address={address}
           selectedChainInfo={selectedChainInfo}
           onChainUpdate={handleUpdateChain}

@@ -24,7 +24,7 @@ const getChallengeParamsRequest = async (req: NextApiRequest, res: NextApiRespon
     nonce: '123456789', //TODO: Replace with your scheme
     notBefore: undefined,
 
-    //The following don't matter bc they will be overriden by the display modal
+    //The following currently don't matter bc they will be overriden by the UI display modal
     expirationDate: '2024-12-22T18:19:55.901Z',
     resources: [],
     assets: [],

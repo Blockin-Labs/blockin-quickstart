@@ -18,7 +18,7 @@ export const SimulatedContext = createContext<SimulatedContextType>({
   setChainId: () => { },
   address: '',
   setAddress: () => { },
-  signChallenge: async () => { return {} },
+  signChallenge: async () => { return { message: '', signature: '' } },
   ownedAssetIds: [],
   displayedResources: [],
   selectedChainInfo: {},
@@ -70,8 +70,8 @@ export const SimulatedContextProvider: React.FC<Props> = ({ children }) => {
     await disconnectWeb3();
   };
 
-  const signChallenge = async (message: string) => {
-    return { originalBytes: new Uint8Array(32), signatureBytes: new Uint8Array(32), message: 'Success' }
+  const signChallenge = async () => {
+    return { message: '', signature: '' };
   }
 
   const simulatedContext: SimulatedContextType = {

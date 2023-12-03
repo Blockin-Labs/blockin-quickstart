@@ -1,8 +1,7 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import { setChainDriver, verifyChallenge } from 'blockin';
+import { NextApiRequest, NextApiResponse } from "next";
 import { parse } from "../../utils/preserveJson";
 import { getChainDriver } from "./chainDriverHandlers";
-import { Numberify } from "bitbadgesjs-utils";
 
 /**
  * Make sure to specify req.body.address and req.body.chain.
@@ -18,9 +17,8 @@ const verifyChallengeRequest = async (req: NextApiRequest, res: NextApiResponse)
 
   try {
     const verificationResponse = await verifyChallenge(
-      body.originalBytes,
-      body.signatureBytes,
-      Numberify,
+      body.message,
+      body.signature,
       {
         //TODO: Add any additional verification checks here (including your nonce check)
         // expectedChallengeParams: {}

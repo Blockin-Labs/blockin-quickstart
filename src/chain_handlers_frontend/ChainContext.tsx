@@ -1,18 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { PresetAsset, PresetUri, SupportedChainMetadata } from 'blockin';
-import { createContext, Dispatch, ReactComponentElement, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
 // import { useAlgorandContext } from './algorand/AlgorandContext';
-import { useEthereumContext } from './ethereum/EthereumContext';
-import { useCosmosContext } from './cosmos/CosmosContext';
-import { useSimulatedContext } from './simulated/SimulatedContext';
 import getConfig from 'next/config';
+import { useCosmosContext } from './cosmos/CosmosContext';
+import { useEthereumContext } from './ethereum/EthereumContext';
+import { useSimulatedContext } from './simulated/SimulatedContext';
+import { useSolanaContext } from './solana/SolanaContext';
 
 const { publicRuntimeConfig } = getConfig();
 
 export type SignChallengeResponse = {
-  originalBytes?: Uint8Array;
-  signatureBytes?: Uint8Array;
-  message?: string;
+  message: string;
+  signature: string
 }
 
 export type ChainContextType = ChainSpecificContextType & {
@@ -56,14 +56,13 @@ const ChainContext = createContext<ChainContextType>({
   setChainId: async () => { },
   address: '',
   setAddress: () => { },
-  signChallenge: async () => { return {} },
+  signChallenge: async () => { return { message: '', signature: '' } },
   chain: 'Default',
   setChain: () => { },
   ownedAssetIds: [],
   displayedResources: [],
   selectedChainInfo: {},
   displayedAssets: []
-
 });
 
 type Props = {
@@ -77,6 +76,7 @@ export const ChainContextProvider: React.FC<Props> = ({ children }) => {
   // const algorandContext = useAlgorandContext();
   const cosmosContext = useCosmosContext();
   const simulatedContext = useSimulatedContext();
+  const solanaContext = useSolanaContext();
 
   useEffect(() => {
     if (chain === 'Ethereum') {
@@ -107,6 +107,8 @@ export const ChainContextProvider: React.FC<Props> = ({ children }) => {
     currentChainContext = cosmosContext;
   } else if (chain?.startsWith('Simulated')) {
     currentChainContext = simulatedContext;
+  } else if (chain?.startsWith('Solana')) {
+    currentChainContext = solanaContext;
   } else {
     currentChainContext = ethereumContext;
   }

@@ -20,7 +20,7 @@
 //   chainId: 'Mainnet',
 //   setChainId: () => { },
 //   setAddress: () => { },
-//   signChallenge: async () => { return {} },
+//   signChallenge: async () => { return { message: '', signature: ''} },
 //   ownedAssetIds: [],
 //   displayedResources: [],
 //   selectedChainInfo: {},

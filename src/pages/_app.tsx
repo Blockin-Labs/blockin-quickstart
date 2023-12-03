@@ -4,14 +4,14 @@ import { ChainContextProvider } from '../chain_handlers_frontend/ChainContext';
 import { CosmosContextProvider } from '../chain_handlers_frontend/cosmos/CosmosContext';
 import { EthereumContextProvider } from '../chain_handlers_frontend/ethereum/EthereumContext';
 
-import { BlockinUIDisplay } from 'blockin/dist/ui';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum';
 import { Web3Modal } from '@web3modal/react';
+import getConfig from 'next/config';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { mainnet } from 'wagmi/chains';
-import getConfig from 'next/config';
 import { SimulatedContextProvider } from '../chain_handlers_frontend/simulated/SimulatedContext';
+import { SolanaContextProvider } from '../chain_handlers_frontend/solana/SolanaContext';
 import '../styles/globals.css';
 
 const { publicRuntimeConfig } = getConfig();
@@ -35,20 +35,21 @@ const App = ({ Component, pageProps }: AppProps) => {
       <WagmiConfig config={wagmiClient}>
         <EthereumContextProvider>
           {/* <AlgorandContextProvider> */}
-          <CosmosContextProvider>
-            <SimulatedContextProvider>
-              <ChainContextProvider>
+          <SolanaContextProvider>
+            <CosmosContextProvider>
+              <SimulatedContextProvider>
+                <ChainContextProvider>
 
-                <Web3Modal projectId={projectId} ethereumClient={ethereumClient}
-                  themeMode="dark"
-                />
-                <Component {...pageProps} />
+                  <Web3Modal projectId={projectId} ethereumClient={ethereumClient}
+                    themeMode="dark"
+                  />
+                  <Component {...pageProps} />
 
-              </ChainContextProvider>
-            </SimulatedContextProvider>
+                </ChainContextProvider>
+              </SimulatedContextProvider>
 
-          </CosmosContextProvider>
-
+            </CosmosContextProvider>
+          </SolanaContextProvider>
           {/* </AlgorandContextProvider> */}
         </EthereumContextProvider>
 

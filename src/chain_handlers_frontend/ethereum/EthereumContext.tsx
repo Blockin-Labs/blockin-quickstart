@@ -20,7 +20,7 @@ export const EthereumContext = createContext<EthereumContextType>({
   setChainId: () => { },
   address: '',
   setAddress: () => { },
-  signChallenge: async () => { return {} },
+  signChallenge: async () => { return { message: '', signature: '' } },
   ownedAssetIds: [],
   displayedResources: [],
   selectedChainInfo: {},
@@ -91,7 +91,7 @@ export const EthereumContextProvider: React.FC<Props> = ({ children }) => {
       params: [msg, from],
     });
 
-    return { originalBytes: new Uint8Array(Buffer.from(msg, 'utf8')), signatureBytes: new Uint8Array(Buffer.from(sign, 'utf8')), message: 'Success' }
+    return { message, signature: sign }
   }
 
   const ethereumContext: EthereumContextType = {

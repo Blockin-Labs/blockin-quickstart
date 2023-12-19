@@ -20,7 +20,7 @@
     "antd": "^5.11.5",
     "bitbadgesjs-proto": "^0.1.193",
     "bitbadgesjs-utils": "^1.1.315",
-    "blockin": "^1.2.66",
+    "blockin": "^1.2.74",
     "blockin-cosmos-driver": "^1.0.4",
     "blockin-eth-driver": "^1.0.15",
     "blockin-sol-driver": "^1.0.2",

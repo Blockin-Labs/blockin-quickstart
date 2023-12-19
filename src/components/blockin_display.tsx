@@ -123,7 +123,7 @@ export const BlockinDisplay = () => {
           connect={async () => {
             connect()
           }}
-          modalStyle={{ color: 'white' }}
+          buttonStyle={undefined}
           disconnect={async () => {
             disconnect()
           }}

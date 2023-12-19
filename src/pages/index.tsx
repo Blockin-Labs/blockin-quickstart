@@ -39,6 +39,8 @@ const Home: NextPage = () => {
 
   // Add a listener to handle messages from the child window
   useEffect(() => {
+
+
     window.addEventListener('message', handleChildWindowMessage);
 
     // Cleanup the listener when the component unmounts
@@ -88,6 +90,8 @@ const Home: NextPage = () => {
         }
       }
     }
+    // Opens a new window with the specified URL, size, and name.
+
     const childWindow = window.open(url, '_blank', 'width=500,height=600');
 
     // You can further customize the child window as needed

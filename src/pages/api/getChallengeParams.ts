@@ -1,6 +1,5 @@
-import { ChallengeParams, setChainDriver } from 'blockin';
+import { ChallengeParams } from 'blockin';
 import { NextApiRequest, NextApiResponse } from "next";
-import { getChainDriver } from "./chainDriverHandlers";
 
 
 /**
@@ -12,9 +11,6 @@ import { getChainDriver } from "./chainDriverHandlers";
  * as a nonce.
  */
 const getChallengeParamsRequest = async (req: NextApiRequest, res: NextApiResponse) => {
-  const chainDriver = getChainDriver(req.body.chain);
-  setChainDriver(chainDriver);
-
   const challengeParams: ChallengeParams<number> = {
     //TODO: Customize 
     domain: 'https://blockin.com',

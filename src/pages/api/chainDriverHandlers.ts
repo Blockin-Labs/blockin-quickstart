@@ -26,7 +26,6 @@ const solDriver = new SolDriver('Solana');
 
 export const getChainDriver = (chain: string) => {
 
-
   switch (chain) {
     case 'Ethereum':
       return ethDriver;

@@ -157,7 +157,8 @@ export const BlockinDisplay = () => {
               name: "General Access",
               description: "Any user who owns this Ethereum NFT is blocked from the site.",
               frozen: true,
-              defaultSelected: true
+              defaultSelected: true,
+              mustSatisfyForAllAssets: true,
             } : chain === 'Cosmos' ? {
               collectionId: 2,
               assetIds: [{ start: 1, end: 1 }],
@@ -167,6 +168,8 @@ export const BlockinDisplay = () => {
               description: "We currently don't support Cosmos assets natively, so we will use a badge for general access instead.",
               frozen: true,
               defaultSelected: true,
+
+              mustSatisfyForAllAssets: true,
             } : {
               collectionId: "0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB",
               assetIds: ["15"],
@@ -175,7 +178,9 @@ export const BlockinDisplay = () => {
               name: "General Access",
               description: "Must not own any CryptoPunks to receive access to this site.",
               frozen: true,
-              defaultSelected: true
+              defaultSelected: true,
+
+              mustSatisfyForAllAssets: true,
             },
             {
               collectionId: 1,
@@ -194,6 +199,7 @@ export const BlockinDisplay = () => {
 
               frozen: false,
               defaultSelected: false,
+              mustSatisfyForAllAssets: true,
             }
             // {
             //   collectionId: 1,

@@ -1,4 +1,4 @@
-import { PresetAsset, PresetUri } from 'blockin';
+import { Asset, PresetUri } from 'blockin';
 import { ethers } from 'ethers';
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
 import Web3Modal from "web3modal";
@@ -52,7 +52,7 @@ export const EthereumContextProvider: React.FC<Props> = ({ children }) => {
   }
   const selectedChainInfo = { getNameForAddress: resolveAddressToENS };
   const displayedResources: PresetUri[] = []; //This can be dynamic based on Chain ID if you want to give different token addresses for different Chain IDs
-  const displayedAssets: PresetAsset<bigint>[] = []; //This can be dynamic based on Chain ID if you want to give different token addresses for different Chain IDs
+  const displayedAssets: Asset<bigint>[] = []; //This can be dynamic based on Chain ID if you want to give different token addresses for different Chain IDs
   //If you would like to support this, you can call this with a useEffect every time connected or address is updated
   const ownedAssetIds: string[] = [];
 

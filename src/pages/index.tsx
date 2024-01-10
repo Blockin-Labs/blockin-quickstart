@@ -194,6 +194,7 @@ const Home: NextPage = () => {
           )}
         </div>
       </div >
+      <div style={{ minHeight: '10vh' }} />
 
     </>
   )

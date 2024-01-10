@@ -60,7 +60,7 @@ export const BlockinDisplay = () => {
 
   const handleVerifyChallenge = async (message: string, signature: string) => {
     const verificationResponse = chain !== 'Simulated' ? await verifyChallengeOnBackend(chain, message, signature) :
-      { verified: true, message: 'Satisfied ownership requirements. Verification success!' };
+      { verified: true };
     if (!verificationResponse.verified) {
       return { success: false, message: `${verificationResponse.message}` }
     }
@@ -79,6 +79,11 @@ export const BlockinDisplay = () => {
 
   const signAndVerifyChallenge = async (challenge: string) => {
     const signChallengeResponse: SignChallengeResponse = await handleSignChallenge(challenge);
+    if (chain === 'Simulated') {
+      setLoggedIn(true);
+      return { success: true, message: 'Successfully signed challenge.' };
+    }
+
     //Check if error in challenge signature
     if (!signChallengeResponse.message || !signChallengeResponse.signature) {
       return { success: false, message: `${signChallengeResponse.message}` };

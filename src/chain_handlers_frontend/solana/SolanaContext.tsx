@@ -1,6 +1,6 @@
 
 import { notification } from 'antd';
-import { PresetAsset, PresetUri } from 'blockin';
+import { Asset, PresetUri } from 'blockin';
 import { Dispatch, SetStateAction, createContext, useCallback, useContext, useState } from 'react';
 import { ChainSpecificContextType } from '../ChainContext';
 
@@ -40,7 +40,7 @@ export const SolanaContextProvider: React.FC<Props> = ({ children }) => {
 
   const connected = address ? true : false;
   const setConnected = () => { }
-  const displayedAssets: PresetAsset<bigint>[] = []; //This can be dynamic based on Chain ID if you want to give different token addresses for different Chain IDs
+  const displayedAssets: Asset<bigint>[] = []; //This can be dynamic based on Chain ID if you want to give different token addresses for different Chain IDs
   const getProvider = () => {
 
     if ('phantom' in window) {

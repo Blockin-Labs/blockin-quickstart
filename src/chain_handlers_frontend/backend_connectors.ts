@@ -1,34 +1,12 @@
-import { ChallengeParams } from "blockin";
-import { stringify } from "../utils/preserveJson";
+import { BigIntify } from "bitbadgesjs-proto";
+import { GenericBlockinVerifyRouteSuccessResponse, getChainForAddress } from "bitbadgesjs-utils";
+import { VerifyChallengeOptions, constructChallengeObjectFromString } from "blockin";
 
-export const getChallengeParams = async (chain: string, address: string): Promise<ChallengeParams<string>> => {
-  const data = await fetch('../api/getChallengeParams', {
+export const verifyAuthenticationAttempt = async (message: string, sig: string, options?: VerifyChallengeOptions): Promise<GenericBlockinVerifyRouteSuccessResponse> => {
+  const chain = getChainForAddress(constructChallengeObjectFromString(message, BigIntify).address);
+  const verificationRes = await fetch('../api/verifyAuthenticationAttempt', {
     method: 'post',
-    body: JSON.stringify({
-      address,
-      chain
-    }),
-    headers: { 'Content-Type': 'application/json' }
-  }).then(res => res.json());
-
-  return data;
-}
-
-export const verifyChallengeOnBackend = async (chain: string, message: string, signature: string) => {
-  const bodyStr = stringify({ message, signature, chain }); //hack to preserve uint8 arrays
-  const verificationRes = await fetch('../api/verifyChallenge', {
-    method: 'post',
-    body: bodyStr,
-    headers: { 'Content-Type': 'application/json' }
-  }).then(res => res.json());
-
-  return verificationRes;
-}
-
-export const getAndVerifyMessageForSignature = async (sig: string) => {
-  const verificationRes = await fetch('../api/getAndVerifySignatureForMessage', {
-    method: 'post',
-    body: JSON.stringify({ signature: sig }),
+    body: JSON.stringify({ message: message, signature: sig, options, chain }),
     headers: { 'Content-Type': 'application/json' }
   }).then(res => res.json());
 

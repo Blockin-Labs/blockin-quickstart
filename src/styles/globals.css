@@ -121,3 +121,80 @@ footer div {
 footer a p {
   margin-left: 2px;
 }
+
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.blockin-button {
+  background: linear-gradient(#98d1fc, #1c8fe7);
+  opacity: 0.85;
+  color: black;
+  padding: 12px 15px;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.blockin-button:hover {
+    opacity: 1;
+}
+
+.blockin-button:disabled {
+    cursor:not-allowed;
+}
+
+
+.blockin-button {
+  width: 120px;
+  height: 50px;
+  padding: 4px 8px;
+  justify-content: center;
+  border: 1px solid black;
+  align-items: center;
+  gap: 8px;
+  border-radius: 39px;
+  background: #1890ff;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+  opacity: 1;
+}
+
+.blockin-button:disabled {
+  background-color: lightgray;
+  color: white;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.blockin-button:hover {
+  border: 1px solid black;
+  opacity: 1;
+  background: inherit;
+  border: 1px solid #1890ff;
+  color: #1890ff;
+}
+
+.blockin-button-secondary {
+  background: inherit;
+  color: inherit;
+  opacity: 1;
+  padding: 5px 8px;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 2px solid gray;
+}
+
+.blockin-button-secondary:hover {
+    opacity: 1;
+    border: 2px solid black;
+}
+
+.blockin-button-secondary:disabled {
+    cursor:not-allowed;
+}

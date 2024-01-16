@@ -1,4 +1,3 @@
-import { BlockinDisplay } from './blockin_display';
 
 const Header = () => {
   return (
@@ -9,11 +8,9 @@ const Header = () => {
             <img src="./blockin-zoomed.png" alt="blockin" height={43} width={43} className='blockin-new-logo' />
           </div>
           LOCKIN</h1>
+        <br />  
+        
       </header >
-      <br />
-      <BlockinDisplay />
-      <br />
-      <br />
       <br />
     </>
   )

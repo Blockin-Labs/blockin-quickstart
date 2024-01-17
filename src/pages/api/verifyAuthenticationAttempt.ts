@@ -47,7 +47,7 @@ const verifyAuthenticationAttempt = async (req: NextApiRequest, res: NextApiResp
       //Once the code reaches here, you should considered the user authenticated.
       return res.status(200).json({ verified: true, message: 'Successfully verified signature' });
     } else {
-      return res.status(400).json({ verified: false, message: 'Blockin verification failedd' });
+      return res.status(400).json({ verified: false, message: 'Blockin verification failed' });
     }
   } catch (err) {
     return res.status(400).json({ verified: false, message: `${err}` });

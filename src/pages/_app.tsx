@@ -34,7 +34,6 @@ const App = ({ Component, pageProps }: AppProps) => {
     <QueryClientProvider client={queryClient}>
       <WagmiConfig config={wagmiClient}>
         <EthereumContextProvider>
-          {/* <AlgorandContextProvider> */}
           <SolanaContextProvider>
             <CosmosContextProvider>
               <SimulatedContextProvider>
@@ -50,7 +49,6 @@ const App = ({ Component, pageProps }: AppProps) => {
 
             </CosmosContextProvider>
           </SolanaContextProvider>
-          {/* </AlgorandContextProvider> */}
         </EthereumContextProvider>
 
       </WagmiConfig>

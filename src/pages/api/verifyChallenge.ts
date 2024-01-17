@@ -1,57 +1,80 @@
-import { verifyChallenge } from 'blockin';
+import { BigIntify, NumberType, getChainForAddress } from 'bitbadgesjs-utils';
+import { constructChallengeObjectFromString, verifyChallenge } from 'blockin';
+import cookie from 'cookie';
 import { NextApiRequest, NextApiResponse } from "next";
-import { parse } from "../../utils/preserveJson";
 import { getChainDriver } from "./chainDriverHandlers";
-import { NumberType } from 'bitbadgesjs-utils';
-
+import { challengeParams } from './getChallengeParams';
 /**
- * Make sure to specify req.body.address and req.body.chain.
- * 
- * You may customize this challenge verification however you would like. This implementation checks that the block ID used
- * as a nonce is within 60 seconds of the block occurring.
+ * You may customize this challenge verification however you would like.
  */
 const verifyChallengeRequest = async (req: NextApiRequest, res: NextApiResponse) => {
   const chainDriver = getChainDriver(req.body.chain);
-
-  const body = parse(JSON.stringify(req.body)); //little hack to preserve Uint8Arrays
+  const body = req.body
 
   try {
+
+    console.log("T:EASDASF  ");
+    console.log(body);
+    const params = constructChallengeObjectFromString(body.message, BigIntify);
     const verificationResponse = await verifyChallenge(
       chainDriver,
       body.message,
       body.signature,
       (item: NumberType) => { return BigInt(item) },
       {
+        expectedChallengeParams: {
+          domain: challengeParams.domain,
+          statement: challengeParams.statement,
+          uri: challengeParams.uri,
+          // address: challengeParams.address,
+          // version: challengeParams.version,
+          // chainId: challengeParams.chainId,
+          // nonce: challengeParams.nonce
+          // notBefore: challengeParams.notBefore,
+          // issuedAt: challengeParams.issuedAt,
+          // expirationDate: challengeParams.expirationDate,
+          // resources: challengeParams.resources,
+          // assets: challengeParams.assets,
+        },
         //TODO: Add any additional verification checks here (including your nonce check)
-        // expectedChallengeParams: {}
         // beforeVerification: () => {}
-        //TODO: Add your snapshot here 
+        //TODO: Add your snapshot here for offline balance checks
         // balancesSnapshot
       }
     );
 
-    /**
-     * TODO:
-     * Here, Blockin has successfully verified the following five things:
-     * 1) Challenge is well-formed
-     * 2) Challenge is valid at present time
-     * 3) Challenge was signed correctly by user
-     * 4) User owns all requested assets at time of signing in
-     * 5) Any additional verification checks specified in the verifyChallenge options
-     * 
-     * Below, you can add any other validity checks that you wish to add.
-     *      -You can use chainDriver.functionName where functionName is in the ChainDriver interface.
-     *      -You can also use the helper functions exported from Blockin to manipulate and parse challenges
-     * For both of the above, check out the Blockin documentation.
-     * 
-     * Once everything is validated and verified, you can add the logic below to grant the user access to your
-     * resource. This can be via any method of your choice, such as:
-     *      -JWTs
-     *      -Session Tokens
-     *      -HTTP Only Cookies
-     *      -Just granting the user access
-     *      -Or anything else
-     */
+
+    //If success, the Blockin message is verified. This means you now know the signature is valid and any assets specified are owned by the user. 
+    //We have also checked that the message parameters match what is expected and were not altered by the user (via body.options.expectedChallengeParams).
+
+    //TODO: You now implement any additional checks or custom logic for your application, such as assigning sesssions, cookies, etc.
+    //It is also important to prevent replay attacks.
+    //You can do this by storing the message and signature in a database and checking that it has not been used before. 
+    //Or, you can check the signature was recent.
+    //For best practices, they should be one-time use only.
+    if (params.issuedAt && new Date(params.issuedAt).getTime() < Date.now() - 1000 * 60 * 5) {
+      return res.status(400).json({ success: false, errorMessage: 'This sign-in is too old' });
+    } else if (!params.issuedAt || !params.expirationDate) {
+      return res.status(400).json({ success: false, errorMessage: 'This sign-in does not have an issuedAt timestamp' });
+    }
+
+
+    // TODO:This can be replaced with other session methods, as well.
+    const sessionData = {
+      chain: getChainForAddress(params.address),
+      address: params.address,
+      nonce: params.nonce,
+    };
+
+    // Set the session cookie
+    res.setHeader('Set-Cookie', cookie.serialize('session', JSON.stringify(sessionData), {
+      httpOnly: true, // Make the cookie accessible only via HTTP (not JavaScript)
+      expires: new Date(params.expirationDate),
+      path: '/', // Set the cookie path to '/'
+      sameSite: 'strict', // Specify the SameSite attribute for security
+      secure: process.env.NODE_ENV === 'production', // Ensure the cookie is secure in production
+    }));
+
     return res.status(200).json({ verified: true, message: verificationResponse.message });
   } catch (err) {
     return res.status(400).json({ verified: false, message: `${err}` });

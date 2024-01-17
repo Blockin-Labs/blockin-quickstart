@@ -4,8 +4,8 @@ import { BlockinUIDisplay } from 'blockin/dist/ui';
 import getConfig from "next/config";
 import { useEffect, useState } from "react";
 import { SignChallengeResponse, useChainContext } from "../chain_handlers_frontend/ChainContext";
-import { getChallengeParams, verifyChallengeOnBackend } from "../chain_handlers_frontend/backend_connectors";
-
+import { getChallengeParams, signOut, verifyChallengeOnBackend } from "../chain_handlers_frontend/backend_connectors";
+import { useCookies } from 'react-cookie';
 const { publicRuntimeConfig } = getConfig();
 
 const IS_DEMO = publicRuntimeConfig.IS_DEMO
@@ -25,6 +25,7 @@ export const BlockinDisplay = () => {
     connected
   } = useChainContext();
 
+  const [_, setCookie] = useCookies(['blockinsession']);
   const [challengeParams, setChallengeParams] = useState({
     domain: 'https://blockin.com',
     statement: 'Signing in allows you to prove ownership of your account and unlock additional features for this site.',
@@ -70,6 +71,7 @@ export const BlockinDisplay = () => {
        * on the frontend to grant the user access such as setting loggedIn to true, adding cookies, or 
        * anything else that needs to be updated.
        */
+      setCookie('blockinsession', JSON.stringify({ address: address, chain: chain }));
       setLoggedIn(true);
       return {
         success: true, message: `${verificationResponse.message}`
@@ -106,6 +108,7 @@ export const BlockinDisplay = () => {
   }
 
   const logout = async () => {
+    await signOut();
     setLoggedIn(false);
   }
 

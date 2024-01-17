@@ -1,5 +1,4 @@
 import { ChallengeParams } from "blockin";
-import { stringify } from "../utils/preserveJson";
 
 export const getChallengeParams = async (chain: string, address: string): Promise<ChallengeParams<string>> => {
   const data = await fetch('../api/getChallengeParams', {
@@ -15,7 +14,7 @@ export const getChallengeParams = async (chain: string, address: string): Promis
 }
 
 export const verifyChallengeOnBackend = async (chain: string, message: string, signature: string) => {
-  const bodyStr = stringify({ message, signature, chain }); //hack to preserve uint8 arrays
+  const bodyStr = JSON.stringify({ message, signature, chain });
   const verificationRes = await fetch('../api/verifyChallenge', {
     method: 'post',
     body: bodyStr,
@@ -25,10 +24,27 @@ export const verifyChallengeOnBackend = async (chain: string, message: string, s
   return verificationRes;
 }
 
-export const getAndVerifyMessageForSignature = async (sig: string) => {
-  const verificationRes = await fetch('../api/getAndVerifySignatureForMessage', {
+export const getPrivateInfo = async (): Promise<any> => {
+  const verificationRes = await fetch('../api/getPrivateInfo', {
     method: 'post',
-    body: JSON.stringify({ signature: sig }),
+    headers: { 'Content-Type': 'application/json' }
+  }).then(res => res.json());
+
+  return verificationRes;
+}
+
+export const signOut = async (): Promise<any> => {
+  const verificationRes = await fetch('../api/signOut', {
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' }
+  }).then(res => res.json());
+
+  return verificationRes;
+}
+
+export const checkSignIn = async (): Promise<any> => {
+  const verificationRes = await fetch('../api/checkSignIn', {
+    method: 'post',
     headers: { 'Content-Type': 'application/json' }
   }).then(res => res.json());
 

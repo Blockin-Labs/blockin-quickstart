@@ -2,6 +2,22 @@ import { ChallengeParams } from 'blockin';
 import { NextApiRequest, NextApiResponse } from "next";
 
 
+
+export const challengeParams: ChallengeParams<number> = {
+  //TODO: Customize 
+  domain: 'https://blockin.com',
+  statement: 'Signing in allows you to prove ownership of your account and unlock additional features for this site.',
+  address: '',
+  uri: 'https://blockin.com/login',
+  nonce: '123456789', //TODO: Implement a one-time-use nonce
+  notBefore: undefined,
+  issuedAt: new Date().toISOString(),
+  expirationDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7).toISOString(),
+
+  //The following currently don't matter bc they will be overriden by the UI display modal
+  resources: [],
+  assets: [],
+}
 /**
  * This function gets a full challenge object.
  * 
@@ -11,22 +27,13 @@ import { NextApiRequest, NextApiResponse } from "next";
  * as a nonce.
  */
 const getChallengeParamsRequest = async (req: NextApiRequest, res: NextApiResponse) => {
-  const challengeParams: ChallengeParams<number> = {
-    //TODO: Customize 
-    domain: 'https://blockin.com',
-    statement: 'Signing in allows you to prove ownership of your account and unlock additional features for this site.',
+
+  return res.status(200).json({
+    ...challengeParams,
     address: req.body.address,
-    uri: 'https://blockin.com/login',
-    nonce: '123456789', //TODO: Replace with your scheme
-    notBefore: undefined,
-
-    //The following currently don't matter bc they will be overriden by the UI display modal
-    expirationDate: '2024-12-22T18:19:55.901Z',
-    resources: [],
-    assets: [],
-  }
-
-  return res.status(200).json(challengeParams);
+    issuedAt: new Date().toISOString(),
+    expirationDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7).toISOString(),
+  });
 };
 
 export default getChallengeParamsRequest;

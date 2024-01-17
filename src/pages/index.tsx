@@ -1,8 +1,12 @@
+import { Avatar } from 'antd';
 import { NumberType } from 'bitbadgesjs-proto';
+import { getChainForAddress } from 'bitbadgesjs-utils';
 import { ChallengeParams } from 'blockin';
 import getConfig from 'next/config';
 import { NextPage } from 'next/types';
 import { useEffect } from 'react';
+import { useCookies } from 'react-cookie';
+import { getChainLogo } from '../../constants';
 import { useChainContext } from '../chain_handlers_frontend/ChainContext';
 import { getPrivateInfo, verifyAuthenticationAttempt } from '../chain_handlers_frontend/backend_connectors';
 import Header from '../components/header';
@@ -14,14 +18,7 @@ const FRONTEND_URL = publicRuntimeConfig.CODEGEN_URL ?? 'https://bitbadges.io'
 const Home: NextPage = () => {
   const chain = useChainContext();
 
-  // const [message, setMessage] = useState<string>('');
-  // const [signature, setSignature] = useState<string>('');
-
-  // const authParams = useMemo(() => {
-  //   if (!message) return undefined;
-  //   return constructChallengeObjectFromString(message, BigIntify);
-  // }, [message]);
-
+  const [_, setCookie] = useCookies(['blockinsession']);
 
   const handleChildWindowMessage = async (event: MessageEvent) => {
     if (event.origin === FRONTEND_URL) {
@@ -52,13 +49,12 @@ const Home: NextPage = () => {
             assets: [],
           }
         });
-        if (!res.success) throw new Error("Authentication failed");
+        console.log(res);
+        if (!res.success) throw new Error(res.errorMessage);
 
         //TODO: Handle any other frontend logic here
-        // The base stuff is all handled in the context itself
-        // chain.setAddress(codeGenerationParams.challengeParams.address);
-        // chain.setChain(getChainForAddress(codeGenerationParams.challengeParams.address));
-        // chain.setLoggedIn(true);
+
+        setCookie('blockinsession', JSON.stringify({ address: codeGenerationParams.challengeParams.address, chain: getChainForAddress(codeGenerationParams.challengeParams.address) }));
       } catch (e) {
         console.log(e);
         alert(e);
@@ -157,7 +153,11 @@ const Home: NextPage = () => {
         <div className='flex-center'>
           {chain.address && chain.loggedIn ? (
             <div className=''>
-              <h3>Logged in as {chain.chain} address {chain.address}</h3>
+              <h3><Avatar
+                src={getChainLogo(chain.chain)}
+                style={{ marginRight: 8 }}
+                size={20}
+              /> {chain.chain} - {chain.address}</h3>
               <br />
               <div className='flex-center'>
                 <button className='blockin-button' onClick={chain.disconnect}>

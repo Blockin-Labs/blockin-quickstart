@@ -16,7 +16,7 @@ const checkSignIn = async (req: NextApiRequest, res: NextApiResponse) => {
       signedIn: true, message: 'Successfully signed in'
     });
   } catch (err) {
-    return res.status(400).json({ signedIn: false, message: `${err}` });
+    return res.status(401).json({ signedIn: false, message: `${err}` });
   }
 };
 

@@ -1,8 +1,11 @@
 import { BigIntify } from "bitbadgesjs-proto";
-import { GenericBlockinVerifyRouteSuccessResponse, getChainForAddress } from "bitbadgesjs-utils";
+import { getChainForAddress } from "bitbadgesjs-utils";
 import { VerifyChallengeOptions, constructChallengeObjectFromString } from "blockin";
 
-export const verifyAuthenticationAttempt = async (message: string, sig: string, options?: VerifyChallengeOptions): Promise<GenericBlockinVerifyRouteSuccessResponse> => {
+export const verifyAuthenticationAttempt = async (message: string, sig: string, options?: VerifyChallengeOptions): Promise<{
+  success: true;
+  errorMessage?: string;
+}> => {
   const chain = getChainForAddress(constructChallengeObjectFromString(message, BigIntify).address);
   const verificationRes = await fetch('../api/verifyAuthenticationAttempt', {
     method: 'post',

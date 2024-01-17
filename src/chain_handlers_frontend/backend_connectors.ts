@@ -12,3 +12,31 @@ export const verifyAuthenticationAttempt = async (message: string, sig: string, 
 
   return verificationRes;
 }
+
+
+export const getPrivateInfo = async (): Promise<any> => {
+  const verificationRes = await fetch('../api/getPrivateInfo', {
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' }
+  }).then(res => res.json());
+
+  return verificationRes;
+}
+
+export const signOut = async (): Promise<any> => {
+  const verificationRes = await fetch('../api/signOut', {
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' }
+  }).then(res => res.json());
+
+  return verificationRes;
+}
+
+export const checkSignIn = async (): Promise<any> => {
+  const verificationRes = await fetch('../api/checkSignIn', {
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' }
+  }).then(res => res.json());
+
+  return verificationRes;
+}

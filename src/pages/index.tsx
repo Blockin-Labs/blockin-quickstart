@@ -1,11 +1,10 @@
 import { NumberType } from 'bitbadgesjs-proto';
-import { getChainForAddress } from 'bitbadgesjs-utils';
 import { ChallengeParams } from 'blockin';
 import getConfig from 'next/config';
 import { NextPage } from 'next/types';
 import { useEffect } from 'react';
 import { useChainContext } from '../chain_handlers_frontend/ChainContext';
-import { verifyAuthenticationAttempt } from '../chain_handlers_frontend/backend_connectors';
+import { getPrivateInfo, verifyAuthenticationAttempt } from '../chain_handlers_frontend/backend_connectors';
 import Header from '../components/header';
 
 const { publicRuntimeConfig } = getConfig();
@@ -22,6 +21,7 @@ const Home: NextPage = () => {
   //   if (!message) return undefined;
   //   return constructChallengeObjectFromString(message, BigIntify);
   // }, [message]);
+
 
   const handleChildWindowMessage = async (event: MessageEvent) => {
     if (event.origin === FRONTEND_URL) {
@@ -55,9 +55,10 @@ const Home: NextPage = () => {
         if (!res.success) throw new Error("Authentication failed");
 
         //TODO: Handle any other frontend logic here
-        chain.setAddress(codeGenerationParams.challengeParams.address);
-        chain.setChain(getChainForAddress(codeGenerationParams.challengeParams.address));
-        chain.setLoggedIn(true);
+        // The base stuff is all handled in the context itself
+        // chain.setAddress(codeGenerationParams.challengeParams.address);
+        // chain.setChain(getChainForAddress(codeGenerationParams.challengeParams.address));
+        // chain.setLoggedIn(true);
       } catch (e) {
         console.log(e);
         alert(e);
@@ -96,7 +97,8 @@ const Home: NextPage = () => {
       address: '0x0f741F4E00453c403151b5e7ca379B4Dc981D685',
       uri: 'https://google.com',
       nonce: '9YClKQzMLtsXD52eT',
-      expirationDate: '2025-12-01T16:06:32.205Z',
+      issuedAt: new Date(Date.now()).toISOString(),
+      expirationDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7).toISOString(),
       resources: [],
       assets: [{
         chain: 'BitBadges',
@@ -126,13 +128,27 @@ const Home: NextPage = () => {
         }
       }
     }
-    // Opens a new window with the specified URL, size, and name.
-
-    const childWindow = window.open(url, '_blank', 'width=600,height=600');
+    // Opens a new window with the specified URL as a fullscreen popup.
+    const childWindow = window.open(url, '_blank', 'width=500,height=800,scrollbars=yes,resizable=yes');
 
     // You can further customize the child window as needed
     childWindow?.focus();
   };
+
+  const SecretInfoButton = <>
+    <button className='blockin-button' style={{ width: 200 }} onClick={async () => {
+      try {
+        const res = await getPrivateInfo();
+        console.log(res.message);
+        alert(res.message);
+      } catch (e) {
+        alert('Error');
+        console.log(e);
+      }
+    }}>
+      Get Secret Info
+    </button>
+  </>
 
   return (
     <>
@@ -147,13 +163,18 @@ const Home: NextPage = () => {
                 <button className='blockin-button' onClick={chain.disconnect}>
                   Disconnect
                 </button>
+                {SecretInfoButton}
               </div>
               <br />
             </div>
           ) : (
-            <button className='blockin-button' onClick={openChildWindow}>
-              Sign In
-            </button>
+
+            <>
+              <button className='blockin-button' onClick={openChildWindow}>
+                Sign In
+              </button>
+              {SecretInfoButton}
+            </>
           )}
 
         </div>

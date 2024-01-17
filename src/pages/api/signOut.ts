@@ -1,0 +1,21 @@
+import { NextApiRequest, NextApiResponse } from "next";
+
+const signOut = async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    //Check the cookie
+    const session = req.cookies.session;
+    if (!session) {
+      return res.status(401).json({ message: 'You are not signed in' });
+    }
+
+    res.setHeader('Set-Cookie', 'session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT');
+
+    return res.status(200).json({ message: 'Successfully signed out' });
+  } catch (err) {
+    return res.status(400).json({ message: `${err}` });
+  }
+};
+
+export default signOut;
+
+

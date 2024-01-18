@@ -1,4 +1,4 @@
-import { BigIntify, NumberType, getChainForAddress } from 'bitbadgesjs-utils';
+import { BigIntify, getChainForAddress } from 'bitbadgesjs-utils';
 import { constructChallengeObjectFromString, verifyChallenge } from 'blockin';
 import cookie from 'cookie';
 import { NextApiRequest, NextApiResponse } from "next";
@@ -12,15 +12,11 @@ const verifyChallengeRequest = async (req: NextApiRequest, res: NextApiResponse)
   const body = req.body
 
   try {
-
-    console.log("T:EASDASF  ");
-    console.log(body);
     const params = constructChallengeObjectFromString(body.message, BigIntify);
     const verificationResponse = await verifyChallenge(
       chainDriver,
       body.message,
       body.signature,
-      (item: NumberType) => { return BigInt(item) },
       {
         expectedChallengeParams: {
           domain: challengeParams.domain,

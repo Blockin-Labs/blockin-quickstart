@@ -1,18 +1,13 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { BitBadgesApi } from "./bitbadges-api";
-import cookie from 'cookie';
-import { constructChallengeObjectFromString } from "blockin";
 import { BigIntify } from "bitbadgesjs-proto";
 import { getChainForAddress } from "bitbadgesjs-utils";
+import { constructChallengeObjectFromString } from "blockin";
+import cookie from 'cookie';
+import { NextApiRequest, NextApiResponse } from "next";
 
 const verifyAuthenticationAttempt = async (req: NextApiRequest, res: NextApiResponse) => {
   const body = req.body;
 
   try {
-    const params = constructChallengeObjectFromString(body.message, BigIntify);
-    //will throw if invalid
-    await BitBadgesApi.verifySignInGeneric({ message: body.message, chain: body.chain, signature: body.signature, options: body.options });
-
     //If success, the Blockin message is verified. This means you now know the signature is valid and any assets specified are owned by the user. 
     //We have also checked that the message parameters match what is expected and were not altered by the user (via body.options.expectedChallengeParams).
 
@@ -21,9 +16,8 @@ const verifyAuthenticationAttempt = async (req: NextApiRequest, res: NextApiResp
     //You can do this by storing the message and signature in a database and checking that it has not been used before. 
     //Or, you can check the signature was recent.
     //For best practices, they should be one-time use only.
-    if (params.issuedAt && new Date(params.issuedAt).getTime() < Date.now() - 1000 * 60 * 5) {
-      return res.status(400).json({ success: false, errorMessage: 'This sign-in is too old' });
-    } else if (!params.issuedAt || !params.expirationDate) {
+    const params = constructChallengeObjectFromString(body.message, BigIntify);
+    if (!params.expirationDate) {
       return res.status(400).json({ success: false, errorMessage: 'This sign-in does not have an issuedAt timestamp' });
     }
 

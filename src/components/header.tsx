@@ -3,11 +3,11 @@ import { BigIntify, NumberType } from 'bitbadgesjs-proto';
 import { getChainForAddress } from 'bitbadgesjs-utils';
 import { ChallengeParams, constructChallengeObjectFromString } from 'blockin';
 import { SignInWithBitBadges as SignInWithBitBadgesButton } from 'blockin/dist/ui';
+import { useMemo } from 'react';
 import { useCookies } from 'react-cookie';
 import { getChainLogo } from '../../constants';
 import { useChainContext } from '../chain_handlers_frontend/ChainContext';
 import { getPrivateInfo, verifyAuthenticationAttempt } from '../chain_handlers_frontend/backend_connectors';
-import { useMemo } from 'react';
 
 
 const Header = () => {
@@ -51,9 +51,17 @@ const Header = () => {
       assetIds: [{ start: 9, end: 9 }],
       mustSatisfyForAllAssets: true,
       mustOwnAmounts: { start: 0, end: 0 },
-    }],
+    }]
   }), []);
 
+  const expectedChallengeParams: Partial<ChallengeParams<NumberType>> = useMemo(() => {
+    const params: Partial<ChallengeParams<NumberType>> = { ...challengeParams };
+    //We allow the user to select their address
+    //delete bc if undefined this checks address === undefined
+    delete params.address;
+
+    return params;
+  }, [challengeParams]);
 
   return (
     <>
@@ -94,16 +102,12 @@ const Header = () => {
                   allowAddressSelect: true,
                   verifyOptions: {
                     issuedAtTimeWindowMs: 3 * 60 * 1000, //3 minute window
-                    expectedChallengeParams: {
-                      ...challengeParams,
-                      address: undefined, //we allow users to select their own address, so we can't know it ahead of time
-                    },
+                    expectedChallengeParams,
                   }
                 }}
                 onSignAndBlockinVerify={async (message, signature, blockinResponse) => {
                   //want to cache the signature and message for later use?
                   const params = constructChallengeObjectFromString(message, BigIntify);
-
                   //TODO: Since this is a centralized solution, it is always good practice to verify the message is as expected.
 
                   try {
@@ -112,7 +116,6 @@ const Header = () => {
                     //TODO: Handle backend logic here
                     const backendChecksRes = await verifyAuthenticationAttempt(message, signature);
                     if (!backendChecksRes.success) throw new Error(backendChecksRes.errorMessage ?? 'Error');
-
 
                     //TODO: Handle any other frontend logic here
                     setCookie('blockinsession', JSON.stringify({ address: params.address, chain: getChainForAddress(params.address) }));

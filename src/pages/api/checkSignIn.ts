@@ -5,7 +5,7 @@ const checkSignIn = async (req: NextApiRequest, res: NextApiResponse) => {
     //Check the cookie
     const session = req.cookies.session;
     if (!session) {
-      return res.status(401).json({ signedIn: false, message: 'You are not signed in' });
+      return res.status(401).json({ signedIn: false, message: 'You must be signed in to access this.' });
     }
 
     const details = JSON.parse(session);

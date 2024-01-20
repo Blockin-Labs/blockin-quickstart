@@ -5,7 +5,7 @@ const getPrivateInfo = async (req: NextApiRequest, res: NextApiResponse) => {
     //Check the cookie
     const session = req.cookies.session;
     if (!session) {
-      return res.status(401).json({ message: 'You are not signed in' });
+      return res.status(401).json({ message: 'You must be signed in to access this.' });
     }
 
     return res.status(200).json({ message: 'The password is: super secret password' });

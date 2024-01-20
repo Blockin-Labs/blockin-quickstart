@@ -5,7 +5,7 @@ const signOut = async (req: NextApiRequest, res: NextApiResponse) => {
     //Check the cookie
     const session = req.cookies.session;
     if (!session) {
-      return res.status(401).json({ message: 'You are not signed in' });
+      return res.status(401).json({ message: 'You must be signed in to access this.' });
     }
 
     res.setHeader('Set-Cookie', 'session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT');

@@ -46,20 +46,21 @@ const Header = () => {
     expirationDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7).toISOString(),
     resources: [],
     //BitBadges badge example
-    assets: [{
-      chain: 'BitBadges',
-      collectionId: 1,
-      assetIds: [{ start: 9, end: 9 }],
-      mustSatisfyForAllAssets: true,
-      mustOwnAmounts: { start: 0, end: 0 },
-    }]
+    assetOwnershipRequirements: {
+      assets: [{
+        chain: 'BitBadges',
+        collectionId: 1,
+        assetIds: [{ start: 9, end: 9 }],
+        mustOwnAmounts: { start: 0, end: 0 },
+      }]
+    },
+
     // BitBadges lists example
     // assets: [{
     //   chain: 'BitBadges',
     //   collectionId: 'BitBadges Lists',
     //   assetIds: ["sample-7e2821b5f4539637a034fa3953604d4c3fa0f0c9ace5c5d2e2eb854b2ff6213a"],
-    //   mustSatisfyForAllAssets: true,
-    //   mustOwnAmounts: { start: 0, end: 0 },
+    //   mustOwnAmounts: { start: 0, end: 0 }, //x1 for on list, x0 for not on list
     // }]
   }), []);
 

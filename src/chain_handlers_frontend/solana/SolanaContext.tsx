@@ -1,6 +1,5 @@
 
 import { notification } from 'antd';
-import { Asset, PresetUri } from 'blockin';
 import { Dispatch, SetStateAction, createContext, useCallback, useContext, useState } from 'react';
 import { ChainSpecificContextType } from '../ChainContext';
 
@@ -18,14 +17,12 @@ export const SolanaContext = createContext<SolanaContextType>({
   chainId: 'Mainnet',
   setChainId: () => { },
   signChallenge: async () => { return { message: '', signature: '' } },
-  ownedAssetIds: [],
-  displayedResources: [],
+
   selectedChainInfo: {},
   connected: false,
   setConnected: () => { },
   solanaProvider: undefined,
   setSolanaProvider: () => { },
-  displayedAssets: [],
 })
 
 type Props = {
@@ -40,7 +37,6 @@ export const SolanaContextProvider: React.FC<Props> = ({ children }) => {
 
   const connected = address ? true : false;
   const setConnected = () => { }
-  const displayedAssets: Asset<bigint>[] = []; //This can be dynamic based on Chain ID if you want to give different token addresses for different Chain IDs
   const getProvider = () => {
 
     if ('phantom' in window) {
@@ -56,10 +52,6 @@ export const SolanaContextProvider: React.FC<Props> = ({ children }) => {
   };
 
   const selectedChainInfo = {}
-  const displayedResources: PresetUri[] = []; //This can be dynamic based on Chain ID if you want to give different token addresses for different Chain IDs
-
-  //If you would like to support this, you can call this with a useEffect every time connected or address is updated
-  const ownedAssetIds: string[] = [];
 
   const connect = async () => {
     await connectAndPopulate(address ?? '');
@@ -112,15 +104,12 @@ export const SolanaContextProvider: React.FC<Props> = ({ children }) => {
     setChainId,
     connect,
     disconnect,
-    ownedAssetIds,
     selectedChainInfo,
-    displayedResources,
     signChallenge,
     address,
     setAddress: () => { },
     setSolanaProvider,
     solanaProvider,
-    displayedAssets
   };
 
 

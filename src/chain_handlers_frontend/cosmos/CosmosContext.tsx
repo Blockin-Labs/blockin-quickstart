@@ -4,7 +4,7 @@ import {
 import { verifyADR36Amino } from '@keplr-wallet/cosmos';
 import { AccountData, Window as KeplrWindow } from "@keplr-wallet/types";
 import { convertToCosmosAddress } from 'bitbadgesjs-utils';
-import { Asset, PresetUri, SupportedChainMetadata } from 'blockin';
+import { SupportedChainMetadata } from 'blockin';
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
 import { ChainSpecificContextType } from '../ChainContext';
 
@@ -31,12 +31,9 @@ export const CosmosContext = createContext<CosmosContextType>({
   chainId: 'Mainnet',
   setChainId: () => { },
   signChallenge: async () => { return { message: '', signature: '' } },
-  ownedAssetIds: [],
-  displayedResources: [],
   selectedChainInfo: {},
   connected: false,
   setConnected: () => { },
-  displayedAssets: [],
 })
 
 
@@ -56,11 +53,6 @@ export const CosmosContextProvider: React.FC<Props> = ({ children }) => {
     logo: COSMOS_LOGO,
     abbreviation: 'COSM'
   };
-  const displayedResources: PresetUri[] = []; //This can be dynamic based on Chain ID if you want to give different token addresses for different Chain IDs
-  const displayedAssets: Asset<bigint>[] = []; //This can be dynamic based on Chain ID if you want to give different token addresses for different Chain IDs
-
-  //If you would like to support this, you can call this with a useEffect every time connected or address is updated
-  const ownedAssetIds: string[] = [];
 
   useEffect(() => {
     if (address) {
@@ -127,15 +119,12 @@ export const CosmosContextProvider: React.FC<Props> = ({ children }) => {
     setChainId,
     connect,
     disconnect,
-    ownedAssetIds,
     selectedChainInfo,
-    displayedResources,
     signChallenge,
     address,
     setAddress,
     signer,
     setSigner,
-    displayedAssets
   };
 
 

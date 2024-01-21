@@ -20,8 +20,6 @@ export const BlockinDisplay = () => {
     disconnect,
     address,
     signChallenge,
-    selectedChainInfo,
-    displayedResources,
     connected
   } = useChainContext();
 
@@ -137,7 +135,7 @@ export const BlockinDisplay = () => {
           }}
           chainOptions={chainOptions} //Should match your selected ChainDrivers in backend / ChainContexts
           address={address}
-          selectedChainInfo={selectedChainInfo}
+          // selectedChainInfo={selectedChainInfo}
           onChainUpdate={handleUpdateChain}
           challengeParams={challengeParams}
           loggedIn={loggedIn}
@@ -147,63 +145,82 @@ export const BlockinDisplay = () => {
           }}
           allowTimeSelect
           selectedChainName={chain}
-          displayedResources={displayedResources}
-          displayedAssets={[
+          displayedResources={undefined}
+          displayedAssetGroups={[
             //TODO: Add your own assets here. Note they can change dependent on the connected chain.
             //TODO: Customize the display further with the additionalDisplay field (e.g. showing the asset image)
 
+
             chain === 'Ethereum' || chain === 'Simulated' ? {
-              collectionId: "0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB",
-              assetIds: ["15"],
-              mustOwnAmounts: { start: 0, end: 0 },
-              chain: 'Ethereum',
+              assetConditionGroup: {
+                assets: [{
+                  collectionId: "0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB",
+                  assetIds: ["15"],
+                  mustOwnAmounts: { start: 0, end: 0 },
+                  chain: 'Ethereum',
+                }],
+              },
               name: "General Access",
               description: "Any user who owns this Ethereum NFT is blocked from the site.",
               frozen: true,
               defaultSelected: true,
-              mustSatisfyForAllAssets: true,
+              image: '',
             } : chain === 'Cosmos' ? {
-              collectionId: 2,
-              assetIds: [{ start: 1, end: 1 }],
-              mustOwnAmounts: { start: 0, end: 0 },
-              chain: 'BitBadges',
+              assetConditionGroup: {
+                assets: [{
+                  collectionId: 1,
+                  assetIds: [{ start: 1, end: 1 }],
+                  mustOwnAmounts: { start: 0, end: 0 },
+                  chain: 'BitBadges',
+                }],
+              },
               name: "General Access",
               description: "We currently don't support Cosmos assets natively, so we will use a badge for general access instead.",
               frozen: true,
               defaultSelected: true,
 
-              mustSatisfyForAllAssets: true,
+
+              image: 'https://bitbadges-ipfs.infura-ipfs.io/ipfs/QmPfdaLWBUxH6ZrWmX1t7zf6zDiNdyZomafBqY5V5Lgwvj'
             } : {
-              collectionId: "0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB",
-              assetIds: ["15"],
-              mustOwnAmounts: { start: 0, end: 0 },
-              chain: 'Algorand',
+              assetConditionGroup: {
+                assets: [{
+
+                  collectionId: "0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB",
+                  assetIds: ["15"],
+                  mustOwnAmounts: { start: 0, end: 0 },
+                  chain: 'Algorand',
+                }],
+              },
               name: "General Access",
               description: "Must not own any CryptoPunks to receive access to this site.",
               frozen: true,
               defaultSelected: true,
 
-              mustSatisfyForAllAssets: true,
+              image: 'https://bitbadges-ipfs.infura-ipfs.io/ipfs/QmPfdaLWBUxH6ZrWmX1t7zf6zDiNdyZomafBqY5V5Lgwvj'
             },
-            {
-              collectionId: 1,
-              assetIds: [{ start: 1, end: 1 }],
-              mustOwnAmounts: { start: 1, end: 1 },
-              chain: 'BitBadges',
-              name: "Administrative Privileges",
-              description: <>
-                {"Must own the admin badge from BitBadges to receive administrative privileges on this site."}
-                <br />
-                <br />
-                <div className="flex-center">
-                  <img src="https://cdn-icons-png.flaticon.com/512/2991/2991252.png" style={{ width: '100px', height: '100px', marginRight: '10px', background: 'inherit' }} />
-                </div>
-              </>,
+            // {
+            //   assetConditionGroup: {
+            //     assets: [{
+            //       collectionId: 1,
+            //       assetIds: [{ start: 1, end: 1 }],
+            //       mustOwnAmounts: { start: 0, end: 0 },
+            //       chain: 'BitBadges',
+            //     }],
+            //   },
+            //   name: "Administrative Privileges",
+            //   description: <>
+            //     {"Must own the admin badge from BitBadges to receive administrative privileges on this site."}
+            //     <br />
+            //     <br />
+            //     <div className="flex-center">
+            //       <img src="https://cdn-icons-png.flaticon.com/512/2991/2991252.png" style={{ width: '100px', height: '100px', marginRight: '10px', background: 'inherit' }} />
+            //     </div>
+            //   </>,
 
-              frozen: false,
-              defaultSelected: false,
-              mustSatisfyForAllAssets: true,
-            }
+            //   frozen: false,
+            //   defaultSelected: false,
+            //   image: ''
+            // },
             // {
             //   collectionId: 1,
             //   assetIds: [{ start: 1, end: 1 }],

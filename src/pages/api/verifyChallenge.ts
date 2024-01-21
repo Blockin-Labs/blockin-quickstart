@@ -73,6 +73,7 @@ const verifyChallengeRequest = async (req: NextApiRequest, res: NextApiResponse)
 
     return res.status(200).json({ verified: true, message: verificationResponse.message });
   } catch (err) {
+    console.log(err);
     return res.status(400).json({ verified: false, message: `${err}` });
   }
 };

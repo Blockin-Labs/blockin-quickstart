@@ -16,7 +16,7 @@ export const challengeParams: ChallengeParams<number> = {
 
   //The following currently don't matter bc they will be overriden by the UI display modal
   resources: [],
-  assets: [],
+  assetOwnershipRequirements: undefined,
 }
 /**
  * This function gets a full challenge object.

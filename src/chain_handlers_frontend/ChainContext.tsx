@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Asset, PresetUri, SupportedChainMetadata } from 'blockin';
+import { SupportedChainMetadata } from 'blockin';
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
 // import { useAlgorandContext } from './algorand/AlgorandContext';
 import getConfig from 'next/config';
@@ -39,10 +39,8 @@ export type ChainSpecificContextType = {
   disconnect: () => {},
   connect: () => {},
   signChallenge: (challenge: string) => Promise<SignChallengeResponse>,
-  displayedResources: PresetUri[],
-  displayedAssets: Asset<bigint>[],
+  
   selectedChainInfo: SupportedChainMetadata | undefined,
-  ownedAssetIds: string[],
 }
 
 const ChainContext = createContext<ChainContextType>({
@@ -59,10 +57,7 @@ const ChainContext = createContext<ChainContextType>({
   signChallenge: async () => { return { message: '', signature: '' } },
   chain: 'Default',
   setChain: () => { },
-  ownedAssetIds: [],
-  displayedResources: [],
   selectedChainInfo: {},
-  displayedAssets: []
 });
 
 type Props = {

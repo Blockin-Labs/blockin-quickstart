@@ -9,7 +9,6 @@ import { getChainLogo } from '../../constants';
 import { useChainContext } from '../chain_handlers_frontend/ChainContext';
 import { getPrivateInfo, verifyAuthenticationAttempt } from '../chain_handlers_frontend/backend_connectors';
 
-
 const Header = () => {
 
   const chain = useChainContext();
@@ -47,13 +46,55 @@ const Header = () => {
     resources: [],
     //BitBadges badge example
     assetOwnershipRequirements: {
-      assets: [{
-        chain: 'BitBadges',
-        collectionId: 1,
-        assetIds: [{ start: 9, end: 9 }],
-        mustOwnAmounts: { start: 0, end: 0 },
-      }]
+      $and: [
+        {
+          assets: [{
+            chain: 'BitBadges',
+            collectionId: 1,
+            assetIds: [{ start: 2, end: 2 }],
+            mustOwnAmounts: { start: 0, end: 0 },
+            ownershipTimes: [{ start: 2, end: 2 }],
+          }],
+          options: {}
+        },
+        {
+          assets: [{
+            chain: 'BitBadges',
+            collectionId: 1,
+            assetIds: [{ start: 9, end: 9 }],
+            mustOwnAmounts: { start: 0, end: 0 },
+            ownershipTimes: [],
+          }, {
+            chain: 'BitBadges',
+            collectionId: 1,
+            assetIds: [{ start: 1, end: 1 }],
+            mustOwnAmounts: { start: 0, end: 0 },
+            ownershipTimes: [],
+          },
+          {
+            chain: 'BitBadges',
+            collectionId: 1,
+            assetIds: [{ start: 10, end: 15 }],
+            mustOwnAmounts: { start: 0, end: 0 },
+            ownershipTimes: [],
+          }
+          ],
+          options: {
+            numMatchesForVerification: 2,
+          }
+        },
+
+      ]
     },
+    // assetOwnershipRequirements: {
+    //   assets: [{
+    //     chain: 'BitBadges',
+    //     collectionId: 1,
+    //     assetIds: [{ start: 9, end: 19 }],
+    //     mustOwnAmounts: { start: 0, end: 0 },
+    //     ownershipTimes: [],
+    //   }],
+    // },
 
     // BitBadges lists example
     // assets: [{
@@ -147,9 +188,9 @@ const Header = () => {
 
                     //TODO: Handle any other frontend logic here
                     setCookie('blockinsession', JSON.stringify({ address: params.address, chain: getChainForAddress(params.address) }));
-                  } catch (e) {
-                    console.log(e);
-                    alert(e);
+                  } catch (e: any) {
+                    console.log(e.errorMessage ?? e.message ?? e);
+                    alert(e.errorMessage ?? e.message ?? e);
                   }
                 }}
               >

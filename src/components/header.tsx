@@ -1,13 +1,14 @@
 import { Avatar } from 'antd';
-import { ChallengeParams, constructChallengeObjectFromString } from 'blockin';
-import { SignInWithBitBadgesButton } from 'blockin/dist/ui';
 import { BigIntify, NumberType } from 'bitbadgesjs-proto';
 import { getChainForAddress } from 'bitbadgesjs-utils';
+import { ChallengeParams, constructChallengeObjectFromString } from 'blockin';
+import { SignInWithBitBadgesButton } from 'blockin/dist/ui';
 import { useMemo } from 'react';
 import { useCookies } from 'react-cookie';
 import { getChainLogo } from '../../constants';
 import { useChainContext } from '../chain_handlers_frontend/ChainContext';
 import { getPrivateInfo, verifyAuthenticationAttempt } from '../chain_handlers_frontend/backend_connectors';
+
 
 const Header = () => {
 
@@ -48,6 +49,47 @@ const Header = () => {
     assetOwnershipRequirements: {
       $and: [
         {
+          $and: [
+            {
+              assets: [{
+                chain: 'BitBadges',
+                collectionId: 1,
+                assetIds: [{ start: 2, end: 2 }],
+                mustOwnAmounts: { start: 0, end: 0 },
+                ownershipTimes: [{ start: 2, end: 2 }],
+              }],
+              options: {}
+            },
+            {
+              assets: [{
+                chain: 'BitBadges',
+                collectionId: 1,
+                assetIds: [{ start: 9, end: 9 }],
+                mustOwnAmounts: { start: 0, end: 0 },
+                ownershipTimes: [],
+              }, {
+                chain: 'BitBadges',
+                collectionId: 1,
+                assetIds: [{ start: 1, end: 1 }],
+                mustOwnAmounts: { start: 0, end: 0 },
+                ownershipTimes: [],
+              },
+              {
+                chain: 'BitBadges',
+                collectionId: 1,
+                assetIds: [{ start: 10, end: 15 }],
+                mustOwnAmounts: { start: 0, end: 0 },
+                ownershipTimes: [],
+              }
+              ],
+              options: {
+                numMatchesForVerification: 2,
+              }
+            },
+
+          ]
+        },
+        {
           assets: [{
             chain: 'BitBadges',
             collectionId: 1,
@@ -56,6 +98,47 @@ const Header = () => {
             ownershipTimes: [{ start: 2, end: 2 }],
           }],
           options: {}
+        },
+        {
+          $or: [
+            {
+              assets: [{
+                chain: 'BitBadges',
+                collectionId: 1,
+                assetIds: [{ start: 2, end: 2 }],
+                mustOwnAmounts: { start: 0, end: 0 },
+                ownershipTimes: [{ start: 2, end: 2 }],
+              }],
+              options: {}
+            },
+            {
+              assets: [{
+                chain: 'BitBadges',
+                collectionId: 1,
+                assetIds: [{ start: 9, end: 9 }],
+                mustOwnAmounts: { start: 0, end: 0 },
+                ownershipTimes: [],
+              }, {
+                chain: 'BitBadges',
+                collectionId: 1,
+                assetIds: [{ start: 1, end: 1 }],
+                mustOwnAmounts: { start: 0, end: 0 },
+                ownershipTimes: [],
+              },
+              {
+                chain: 'BitBadges',
+                collectionId: 1,
+                assetIds: [{ start: 10, end: 15 }],
+                mustOwnAmounts: { start: 0, end: 0 },
+                ownershipTimes: [],
+              }
+              ],
+              options: {
+                numMatchesForVerification: 2,
+              }
+            },
+
+          ]
         },
         {
           assets: [{
@@ -87,13 +170,36 @@ const Header = () => {
       ]
     },
     // assetOwnershipRequirements: {
-    //   assets: [{
-    //     chain: 'BitBadges',
-    //     collectionId: 1,
-    //     assetIds: [{ start: 9, end: 19 }],
-    //     mustOwnAmounts: { start: 0, end: 0 },
-    //     ownershipTimes: [],
-    //   }],
+    //   $or: [{
+    //     assets: [{
+    //       chain: 'BitBadges',
+    //       collectionId: 1,
+    //       assetIds: [{ start: 19, end: 19 }],
+    //       mustOwnAmounts: { start: 0, end: 0 },
+    //       ownershipTimes: [],
+    //     }, {
+    //       chain: 'BitBadges',
+    //       collectionId: 1,
+    //       assetIds: [{ start: 1, end: 1 }],
+    //       mustOwnAmounts: { start: 1, end: 1 },
+    //       ownershipTimes: [],
+    //     }
+    //     ]
+    //   }, {
+    //     assets: [{
+    //       chain: 'BitBadges',
+    //       collectionId: 1,
+    //       assetIds: [{ start: 19, end: 19 }],
+    //       mustOwnAmounts: { start: 1, end: 1 },
+    //       ownershipTimes: [],
+    //     }, {
+    //       chain: 'BitBadges',
+    //       collectionId: 1,
+    //       assetIds: [{ start: 1, end: 1 }],
+    //       mustOwnAmounts: { start: 0, end: 0 },
+    //       ownershipTimes: [],
+    //     }],
+    //   }]
     // },
 
     // BitBadges lists example
@@ -104,6 +210,7 @@ const Header = () => {
     //   mustOwnAmounts: { start: 0, end: 0 }, //x1 for on list, x0 for not on list
     // }]
   }), []);
+
 
 
   const expectedChallengeParams: Partial<ChallengeParams<NumberType>> = useMemo(() => {

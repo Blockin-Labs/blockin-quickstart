@@ -1,3 +1,6 @@
+## Archived
+This repository is archived and no longer maintained. Please refer to the [BitBadges Quickstart](https://github.com/bitbadges/bitbadges-quickstart) for the latest version of the quickstart repository.
+
 ## Blockin Quickstart Repo
 
 Welcome to the Blockin Quickstart Repo! This repository is a quickstart frontend / backend example repository to get started using Blockin. The pages/api folder is for your backend. Everything else is for your frontend. The backend and frontend should be completely decoupled with no overlap.

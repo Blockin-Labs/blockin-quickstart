@@ -264,7 +264,7 @@ const Header = () => {
                   },
                   expectVerifySuccess: true,
                 }}
-                onSignAndBlockinVerify={async (message, signature, blockinResponse) => {
+                onSignAndBlockinVerify={async (message, signature, _verificationResponse) => {
                   //want to cache the signature and message for later use?
                   const params = constructChallengeObjectFromString(message, BigIntify);
                   //TODO: Since this is a centralized solution, it is always good practice to verify the message is as expected.
@@ -287,7 +287,10 @@ const Header = () => {
                   */
 
                   try {
-                    if (!blockinResponse.success) throw new Error(blockinResponse.errorMessage ?? 'Error');
+                    // You can check the verification repsonse from the poup here, but it is not to be trusted unless in specific cases.
+                    // We verify the signature on the backend to ensure the user is not tampering with the verification response.
+
+                    // if (!blockinResponse.success) throw new Error(blockinResponse.errorMessage ?? 'Error');
 
                     //TODO: Handle backend logic here
                     const backendChecksRes = await verifyAuthenticationAttempt(message, signature);

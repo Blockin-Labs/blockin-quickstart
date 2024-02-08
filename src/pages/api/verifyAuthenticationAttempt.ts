@@ -3,11 +3,20 @@ import { getChainForAddress } from "bitbadgesjs-utils";
 import { constructChallengeObjectFromString } from "blockin";
 import cookie from 'cookie';
 import { NextApiRequest, NextApiResponse } from "next";
+import { BitBadgesApi } from "./bitbadges-api";
 
 const verifyAuthenticationAttempt = async (req: NextApiRequest, res: NextApiResponse) => {
   const body = req.body;
+  const { message, signature, options } = body;
 
   try {
+    const chain = getChainForAddress(constructChallengeObjectFromString(message, BigIntify).address);
+    const verificationResponse = await BitBadgesApi.verifySignInGeneric({ chain, message, signature, options });
+    if (!verificationResponse.success) {
+      return res.status(400).json({ success: false, errorMessage: 'Did not pass Blockin verification' });
+    }
+
+
     //If success, the Blockin message is verified. This means you now know the signature is valid and any assets specified are owned by the user. 
     //We have also checked that the message parameters match what is expected and were not altered by the user (via body.options.expectedChallengeParams).
 
